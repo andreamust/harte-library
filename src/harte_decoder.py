@@ -2,7 +2,7 @@
 Utility functions related to the generation and interpretation of the
 Harte chord notation.
 """
-from collections import OrderedDict
+from harte_map import GRADES_SHORTHAND_MAP
 from typing import List
 
 from music21 import chord, interval, note
@@ -26,29 +26,11 @@ def simplify_harte(harte_grades: List) -> str:
         The output string has a format such as: :maj7(b9)
     """
     clean_harte_grades = clean_grades(harte_grades)
-    shorthand_map = OrderedDict({
-        ('3', '5', 'b7', '9'): '9',
-        ('3', '5', '7', '9'): 'maj9',
-        ('b3', '5', 'b7', '9'): 'min9',
-        ('3', '5', 'b7'): '7',
-        ('3', '5', '6'): 'maj6',
-        ('b3', '5', '6'): 'min6',
-        ('3', '5', '7'): 'maj7',
-        ('b3', 'b5', 'bb7'): 'dim7',
-        ('b3', '5', 'b7'): 'min7',
-        ('b3', 'b5', 'b7'): 'hdim7',
-        ('b3', '5', '7'): 'minmaj7',
-        ('3', '5'): 'maj',
-        ('b3', '5'): 'min',
-        ('b3', 'b5'): 'dim',
-        ('3', '#5'): 'aug',
-        ('4', '5'): 'sus4',
-    })
     separator, shorthand = '', ''
-    for grades in shorthand_map.keys():
+    for grades in GRADES_SHORTHAND_MAP.keys():
         intersection = set(grades).intersection(clean_harte_grades)
         if len(intersection) == len(grades):
-            shorthand = shorthand_map[grades]
+            shorthand = GRADES_SHORTHAND_MAP[grades]
             clean_harte_grades = list(set(clean_harte_grades) - intersection)
             if 'sus' in shorthand and '*3' in clean_harte_grades:
                 clean_harte_grades.remove('*3')

@@ -4,7 +4,7 @@
 
 from music21 import note, interval
 
-from harte_map import HARTE_SHORTHAND_MAP
+from harte_map import SHORTHAND_GRADES_MAP
 
 
 def extend_harte(harte_grades: str) -> list:
@@ -16,8 +16,8 @@ def extend_harte(harte_grades: str) -> list:
     any shortcut
     """
     split_grades = harte_grades.split('(')
-    assert split_grades[0] in HARTE_SHORTHAND_MAP.keys(), 'The Harte shorthand is not mapped.'
-    extended_shorthand = list(HARTE_SHORTHAND_MAP[split_grades[0]])
+    assert split_grades[0] in SHORTHAND_GRADES_MAP.keys(), 'The Harte shorthand is not mapped.'
+    extended_shorthand = list(SHORTHAND_GRADES_MAP[split_grades[0]])
     # if there is only a shorthand
     if len(split_grades) == 1:
         return extended_shorthand
