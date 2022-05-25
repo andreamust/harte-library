@@ -23,4 +23,18 @@ class Hartify():
         """
         print('ciao')
 
+    def decode(self):
+        """
+
+        :return:
+        """
+        pass
+
+    def encode(self):
+        """
+
+        :return:
+        """
+        pass
+
 Hartify(0)
