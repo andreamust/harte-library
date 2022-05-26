@@ -3,7 +3,7 @@
 """
 
 
-class Hartify():
+class Hartify:
     """
 
     """
@@ -21,7 +21,7 @@ class Hartify():
 
         :return:
         """
-        print('ciao')
+        print('Not a valid Harte Chord.')
 
     def decode(self):
         """
