@@ -41,24 +41,7 @@ def simplify_harte(harte_grades: List) -> str:
     return separator + shorthand + clean_harte_grades
 
 
-def grammar_rule_to_music21_chord_type(rule: str):
-    """Convert grammar rule so that it can be used as key in
-    music21.harmony.CHORD_TYPES.
-
-    Parameters
-    ----------
-    rule : str
-        Grammar rule
-
-    Returns
-    -------
-    str
-        music21 CHORD_TYPE rule
-    """
-    return rule.replace("_", "-")
-
-
-def calculate_interval(note_1: note, note_2: note, simple: bool = True) -> str:
+def calculate_interval(note_1: note, note_2: note, octave_1: int = 4, octave_2: int = 5, simple: bool = True) -> str:
     """
     Utility function that given two music21 notes returns the interval calculated
     between the two.
@@ -77,8 +60,8 @@ def calculate_interval(note_1: note, note_2: note, simple: bool = True) -> str:
         An interval as convention in the Harte notation (i.e. b for flat and #
         for sharp).
     """
-    note_1.octave = 4
-    note_2.octave = 5
+    note_1.octave = octave_1
+    note_2.octave = octave_2
     mode = 'simpleName' if simple is True else 'name'
     computed_interval = getattr(interval.Interval(note_1, note_2), mode)
     return convert_intervals(computed_interval).replace('b2', 'b9').replace('2', '9')
