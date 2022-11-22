@@ -1,0 +1,23 @@
+chord: note ":" SHORTHAND ("(" degree_list ")")? ("/" bass)?
+     | note ":" "(" degree_list ")" ("/" bass)?
+     | note ("/" bass)?
+     | NA
+
+note: NATURAL | NATURAL MODIFIER
+NATURAL: "A" | "B" | "C" | "D" | "E" | "F" | "G"
+MODIFIER: "b" | "#"
+NA: "N"
+
+bass: degree
+degree_list: degree ("," degree)*
+degree: MISSING? MODIFIER* INTERVAL
+
+MISSING: "*"
+INTERVAL: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13"
+SHORTHAND: "maj" | "min" | "aug" | "dim" | "7" | "maj7" | "minmaj7" | "min7" | "augmaj7" 
+         | "aug7" | "hdim7" | "dim7" | "dom7dim5" | "maj6" | "min6" | "maj9" | "9" 
+         | "minmaj9" | "min9" | "augmaj9" | "aug9" | "hdim9" | "hdimmin9" | "dim9" 
+         | "dimmin9" | "11" | "maj11" | "minmaj11" | "min11" | "augmaj11" | "aug11" 
+         | "hdim11" | "dim11" | "maj13" | "13" | "minmaj13" | "min13" | "augmaj13" 
+         | "hdim13" | "sus2" | "sus4" | "7sus4" | "power" | "pedal"
+%ignore " "
