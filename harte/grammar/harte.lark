@@ -1,3 +1,5 @@
+start: chord*
+
 chord: note ":" SHORTHAND ("(" degree_list ")")? ("/" bass)?
      | note ":" "(" degree_list ")" ("/" bass)?
      | note ("/" bass)?
