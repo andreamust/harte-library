@@ -11,7 +11,6 @@ class Harte(Chord):
     """
 
     """
-
     def __init__(self, chord: str, **keywords):
         """
 
@@ -34,7 +33,8 @@ class Harte(Chord):
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else None
-        print(self._degrees)
+
+        # self.bass(self._bass)
 
         super().__init__(**keywords)
 
