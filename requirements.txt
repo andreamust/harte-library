@@ -1,0 +1,4 @@
+lark~=1.1.2
+music21~=8.1.0
+numpy~=1.23.5
+ordered-set~=4.1.0
