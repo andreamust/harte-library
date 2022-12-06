@@ -3,8 +3,10 @@
 """
 
 from music21.chord import Chord, ChordException
+from music21.pitch import Pitch
 
 from parse_harte import PARSER
+from harte_utils import convert_interval
 
 
 class Harte(Chord):
@@ -34,7 +36,8 @@ class Harte(Chord):
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else None
 
-        # self.bass(self._bass)
+        self.Chord = Chord([Pitch(self._bass, octave=4)])
+        print(self.Chord)
 
         super().__init__(**keywords)
 

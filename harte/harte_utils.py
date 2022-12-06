@@ -39,7 +39,7 @@ def convert_interval(chord_interval: str) -> str:
         if 'b' in chord_interval or '#' in chord_interval:
             return chord_interval.replace('b', 'd').replace('#', 'A')
         return f'P{chord_interval}'
-    if 'b' in chord_interval or '#' in chord_interval:
+    elif 'b' in chord_interval or '#' in chord_interval:
         return chord_interval.replace('bb', 'd').replace('b', 'm').replace('#', 'A')
     return f'M{chord_interval}'
 
