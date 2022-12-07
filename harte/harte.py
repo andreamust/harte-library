@@ -9,6 +9,7 @@ from music21.note import Note
 from interval import HarteInterval
 
 from parse_harte import PARSER
+from utils import unwrap_shorthand
 
 
 class Harte(Chord):
@@ -38,6 +39,8 @@ class Harte(Chord):
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else None
+        self._unwrapped_degrees = unwrap_shorthand(self._shorthand,
+                                                   self._degrees)
 
         self._m21_chord = Chord()
         self._m21_root = Note(self._root)
@@ -57,7 +60,7 @@ class Harte(Chord):
 
         :return:
         """
-        pass
+        return self._degrees
 
     def get_root(self) -> str:
         """
@@ -103,7 +106,7 @@ class Harte(Chord):
 
         :return:
         """
-        pass
+        raise NotImplementedError
 
     def unwrap_shorthand(self) -> str:
         """
