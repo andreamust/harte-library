@@ -2,39 +2,44 @@
 
 """
 
-from music21.interval import Interval
+from music21.interval import Interval, IntervalException
 
-import re
+from utils import convert_interval
+
 
 class HarteInterval(Interval):
     """
 
-
     """
-    def __init__(self, harte_interval: str, **keywords):
+
+    def __init__(self, harte_interval: str):
         """
 
         :param harte_interval:
-        :type interval: str
+        :type harte_interval: str
         """
         self._harte_interval = harte_interval
+        try:
+            self._converted_interval = convert_interval(self._harte_interval)
+        except ValueError:
+            raise IntervalException('Harte Interval cannot be converted')
+        super().__init__(convert_interval(self._harte_interval))
 
-        super().__init__(**keywords)
-
-
-    def _convert_interval(self):
+    def __repr__(self):
         """
 
+        :return:
         """
-        regex = r'([#]+)?([b]+)?(\d+)'
-        # find all matches
-        matches = re.findall(regex, self._harte_interval)[0]
-        if int(matches[2]) in [1,4,5]:
+        pass
 
-        print(matches)
+    def __str__(self):
+        """
+
+        :return:
+        """
+        pass
 
 
 if __name__ == '__main__':
-    interval = HarteInterval('13')
-    interval._convert_interval()
-
+    interval = HarteInterval('bb3').name
+    print(interval)

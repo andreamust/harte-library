@@ -5,7 +5,7 @@ chord tones/grades.
 
 from collections import OrderedDict
 
-SHORTHAND_GRADES_MAP = {
+SHORTHAND_DEGREE_MAP = {
     'maj': ('3', '5'),
     'min': ('b3', '5'),
     'aug': ('3', '#5'),
@@ -24,7 +24,7 @@ SHORTHAND_GRADES_MAP = {
     'sus4': ('4', '5'),
 }
 
-GRADES_SHORTHAND_MAP = OrderedDict({
+DEGREE_SHORTHAND_MAP = OrderedDict({
     ('3', '5', 'b7', '9'): '9',
     ('3', '5', '7', '9'): 'maj9',
     ('b3', '5', 'b7', '9'): 'min9',
