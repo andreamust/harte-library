@@ -3,6 +3,9 @@
 """
 
 from music21.interval import Interval, IntervalException
+from music21.note import Note
+from music21.pitch import Pitch
+from music21.chord import Chord
 
 from utils import convert_interval
 
@@ -41,5 +44,12 @@ class HarteInterval(Interval):
 
 
 if __name__ == '__main__':
-    interval = HarteInterval('bb3').name
-    print(interval)
+    chord = Chord()
+    root = Note('C')
+    bass = HarteInterval('b3').transposeNote(root)
+    degrees = [HarteInterval(x).transposeNote(root) for x in ['b3', '5', 'b7']]
+    chord.add(degrees)
+    chord.bass(bass)
+    chord.root(root)
+    print([root, bass, *degrees])
+    print(chord.bass())

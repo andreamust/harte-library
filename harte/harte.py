@@ -4,15 +4,18 @@
 
 from music21.chord import Chord, ChordException
 from music21.pitch import Pitch
+from music21.note import Note
+
+from interval import HarteInterval
 
 from parse_harte import PARSER
-from harte_utils import convert_interval
 
 
 class Harte(Chord):
     """
 
     """
+
     def __init__(self, chord: str, **keywords):
         """
 
@@ -36,8 +39,16 @@ class Harte(Chord):
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else None
 
-        self.Chord = Chord([Pitch(self._bass, octave=4)])
-        print(self.Chord)
+        self._m21_chord = Chord()
+        self._m21_root = Note(self._root)
+        if self._bass:
+            self._m21_bass = HarteInterval('b3').transposeNote(self._bass)
+            self._m21_chord.bass(self._m21_bass)
+        if self._degrees:
+            self._m21_degrees = [HarteInterval(x).transposeNote(self._root)
+                                 for x in self._degrees]
+            self._m21_chord.add(self._m21_degrees)
+        print(self._m21_chord)
 
         super().__init__(**keywords)
 
