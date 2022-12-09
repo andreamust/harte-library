@@ -19,7 +19,7 @@ def convert_interval(harte_interval: str) -> str:
     base_degree = int(matches[2]) if int(matches[2]) < 8 else int(
         matches[2]) - 7
 
-    if int(matches[2]) in [1, 4, 5]:
+    if base_degree in [1, 4, 5]:
         if len(matches[0]) == 0 and len(matches[1]) == 0:
             modifier = 'P'
         elif len(matches[1]) == 1 and len(matches[0]) == 0:

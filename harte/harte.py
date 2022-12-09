@@ -6,7 +6,7 @@ from music21.chord import Chord, ChordException
 from music21.note import Note
 
 from interval import HarteInterval
-from mappings import SHORTHAND_DEGREES
+from mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from parse_harte import PARSER
 
 
@@ -21,6 +21,7 @@ class Harte(Chord):
         :param chord:
         :type chord: str
         """
+        self.chord = chord
         try:
             parsed_chord = PARSER.parse(chord)
             print(parsed_chord)
@@ -64,6 +65,7 @@ class Harte(Chord):
         self._all_degrees = list(set(self._all_degrees))
 
         # convert notes and interval to m21 primitives
+        print(self._all_degrees)
         self._m21_root = Note(self._root)
         self._m21_degrees = [HarteInterval(x).transposeNote(self._m21_root)
                              for x in self._all_degrees]
@@ -122,12 +124,31 @@ class Harte(Chord):
         """
         return self._shorthand
 
-    def simplify(self) -> str:
+    def prettify(self) -> str:
         """
 
         :return:
         """
-        raise NotImplementedError
+        separator, shorthand = None, None
+        degrees = self._all_degrees
+        if '1' in degrees:
+            degrees.remove('1')
+        for grades in DEGREE_SHORTHAND_MAP.keys():
+            intersection = set(grades).intersection(degrees)
+            if len(intersection) == len(grades):
+                shorthand = DEGREE_SHORTHAND_MAP[grades]
+                clean_harte_degrees = list(
+                    set(degrees) - intersection)
+                if 'sus' in shorthand and '*3' in clean_harte_degrees:
+                    clean_harte_degrees.remove('*3')
+                break
+        if shorthand:
+            clean_harte_degrees = f'({",".join([x for x in clean_harte_degrees])})' if len(
+                clean_harte_degrees) > 0 else ''
+            if len(shorthand) > 0 or len(clean_harte_degrees) > 0:
+                separator = ':'
+            return self._root + separator + shorthand + clean_harte_degrees
+        return self.chord
 
     def unwrap_shorthand(self) -> list[str] | None:
         """
@@ -146,14 +167,31 @@ class Harte(Chord):
         :param other:
         :return:
         """
-        pass
+        if isinstance(other, Harte):
+            return self._root == other.get_root() and self._degrees == other.get_degrees() and self._bass == other.get_bass()
+        return False
+
+    def __repr__(self):
+        """
+
+        :return:
+        """
+        return f'Harte({self._root}:{self._shorthand}:{self._degrees}:{self._bass})'
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return f'{self._root}:{self._shorthand}:{self._degrees}:{self._bass}'
 
 
 if __name__ == '__main__':
     # test utilities
-    c = Harte('C:maj7(3,*5,6)/3')
+    c = Harte('C:(3,5,7,9,11)/3')
     root = c.get_root()
     print(c.fullName)
     print(c.commonName)
     print(c.inversion())
     print(root, c.bass(), c.get_bass())
+    print(c.prettify())
