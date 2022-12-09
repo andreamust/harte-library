@@ -14,7 +14,7 @@ class HarteInterval(Interval):
     music21 Interval class extension to support the Harte notation.
     """
 
-    def __init__(self, harte_interval: str):
+    def __init__(self, harte_interval: str, **keywords):
         """
         Constructor for the HarteInterval class. It takes a string containing
         an interval as expressed by the Harte notation (e.g. 'b2') and aligns
@@ -29,7 +29,7 @@ class HarteInterval(Interval):
             self._converted_interval = convert_interval(self._harte_interval)
         except ValueError:
             raise IntervalException('Harte Interval cannot be converted')
-        super().__init__(convert_interval(self._harte_interval))
+        super().__init__(convert_interval(self._harte_interval), **keywords)
 
     def __eq__(self, other):
         """
