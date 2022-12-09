@@ -153,5 +153,7 @@ if __name__ == '__main__':
     # test utilities
     c = Harte('C:maj7(3,*5,6)/3')
     root = c.get_root()
+    print(c.fullName)
+    print(c.commonName)
     print(c.inversion())
     print(root, c.bass(), c.get_bass())
