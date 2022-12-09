@@ -38,6 +38,7 @@ class Harte(Chord):
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else '1'
+        self._removed_degrees = [x for x in self._degrees if x.startswith('*')]
 
         # unwrap shorthand if it exists and merge with degrees
         # if no shorthand exists, just use the degrees
@@ -53,6 +54,8 @@ class Harte(Chord):
         else:
             self._all_degrees = ['1', '3', '5']
 
+        self._all_degrees = [x for x in self._all_degrees if
+                             x not in self._removed_degrees]
         # add root and bass note to the overall list of degrees
         self._all_degrees.append(self._bass)
         self._all_degrees.append('1')
@@ -148,7 +151,7 @@ class Harte(Chord):
 
 if __name__ == '__main__':
     # test utilities
-    c = Harte('C:maj7(3,5,6)/3')
+    c = Harte('C:maj7(3,*5,6)/3')
     root = c.get_root()
     print(c.inversion())
     print(root, c.bass(), c.get_bass())
