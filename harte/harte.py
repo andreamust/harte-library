@@ -168,7 +168,8 @@ class Harte(Chord):
         :return:
         """
         if isinstance(other, Harte):
-            return self._root == other.get_root() and self._degrees == other.get_degrees() and self._bass == other.get_bass()
+            return self._root == other.get_root() and self._degrees == \
+                other.get_degrees() and self._bass == other.get_bass()
         return False
 
     def __repr__(self):
