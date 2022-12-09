@@ -3,13 +3,11 @@
 """
 
 from music21.chord import Chord, ChordException
-from music21.pitch import Pitch
 from music21.note import Note
 
 from interval import HarteInterval
-
+from mappings import SHORTHAND_DEGREES
 from parse_harte import PARSER
-from utils import unwrap_shorthand
 
 
 class Harte(Chord):
@@ -32,28 +30,48 @@ class Harte(Chord):
 
         assert parsed_chord['root']
 
+        # retrieve information from the parsed chord
         self._root = parsed_chord['root']
         self._shorthand = parsed_chord[
             'shorthand'] if 'shorthand' in parsed_chord.keys() else None
         self._degrees = parsed_chord[
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
-            'bass'] if 'bass' in parsed_chord.keys() else None
-        self._unwrapped_degrees = unwrap_shorthand(self._shorthand,
-                                                   self._degrees)
+            'bass'] if 'bass' in parsed_chord.keys() else '1'
 
-        self._m21_chord = Chord()
+        # unwrap shorthand if it exists and merge with degrees
+        # if no shorthand exists, just use the degrees
+        # if no degrees exist, assume the chord is a major triad
+        if self._shorthand:
+            assert self._shorthand in SHORTHAND_DEGREES.keys(), 'The Harte ' \
+                                                                'shorthand is' \
+                                                                ' not valid. '
+            self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
+            self._all_degrees = self._shorthand_degrees + self._degrees
+        elif self._degrees:
+            self._all_degrees = self._degrees
+        else:
+            self._all_degrees = ['1', '3', '5']
+
+        # add root and bass note to the overall list of degrees
+        self._all_degrees.append(self._bass)
+        self._all_degrees.append('1')
+        # sort the list and remove duplicates
+        self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
+        self._all_degrees = list(set(self._all_degrees))
+
+        # convert notes and interval to m21 primitives
         self._m21_root = Note(self._root)
-        if self._bass:
-            self._m21_bass = HarteInterval('b3').transposeNote(self._bass)
-            self._m21_chord.bass(self._m21_bass)
-        if self._degrees:
-            self._m21_degrees = [HarteInterval(x).transposeNote(self._root)
-                                 for x in self._degrees]
-            self._m21_chord.add(self._m21_degrees)
-        print(self._m21_chord)
+        self._m21_degrees = [HarteInterval(x).transposeNote(self._m21_root)
+                             for x in self._all_degrees]
+        self._m21_bass = HarteInterval(self._bass).transposeNote(
+            self._m21_root)
 
-        super().__init__(**keywords)
+        # initialize the parent constructor
+        print(self._m21_degrees)
+        super().__init__(self._m21_degrees, **keywords)
+        super().root(self._m21_root)
+        super().bass(self._m21_bass)
 
     def get_degrees(self) -> list[str]:
         """
@@ -108,23 +126,21 @@ class Harte(Chord):
         """
         raise NotImplementedError
 
-    def unwrap_shorthand(self) -> str:
+    def unwrap_shorthand(self) -> list[str] | None:
         """
 
         :return:
         """
-        pass
+        if self._shorthand:
+            return self._all_degrees
+        elif self._degrees:
+            return self._degrees
+        return None
 
-    def __repr__(self):
+    def __eq__(self, other):
         """
 
-        :return:
-        """
-        pass
-
-    def __str__(self):
-        """
-
+        :param other:
         :return:
         """
         pass
@@ -132,6 +148,7 @@ class Harte(Chord):
 
 if __name__ == '__main__':
     # test utilities
-    c = Harte('C:(3,5,6)')
+    c = Harte('C:maj7(3,5,6)/3')
     root = c.get_root()
-    print(root)
+    print(c.inversion())
+    print(root, c.bass(), c.get_bass())
