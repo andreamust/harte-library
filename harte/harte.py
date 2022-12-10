@@ -2,12 +2,11 @@
 
 """
 
-from music21.chord import Chord, ChordException
-from music21.note import Note
-
 from harte.interval import HarteInterval
 from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from harte.parse_harte import PARSER
+from music21.chord import Chord, ChordException
+from music21.note import Note
 
 
 class Harte(Chord):
@@ -24,7 +23,6 @@ class Harte(Chord):
         self.chord = chord
         try:
             parsed_chord = PARSER.parse(chord)
-            print(parsed_chord)
         except NameError:
             raise ChordException(
                 f'The input chord {chord} is not a valid Harte chord')
@@ -39,7 +37,8 @@ class Harte(Chord):
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else '1'
-        self._removed_degrees = [x for x in self._degrees if x.startswith('*')]
+        self._removed_degrees = [x for x in self._degrees and x.startswith(
+            '*')] if self._degrees else []
 
         # unwrap shorthand if it exists and merge with degrees
         # if no shorthand exists, just use the degrees
@@ -49,7 +48,7 @@ class Harte(Chord):
                                                                 'shorthand is' \
                                                                 ' not valid. '
             self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
-            self._all_degrees = self._shorthand_degrees + self._degrees
+            self._all_degrees = self._shorthand_degrees + self._degrees if self._degrees else self._shorthand_degrees
         elif self._degrees:
             self._all_degrees = self._degrees
         else:
@@ -65,7 +64,6 @@ class Harte(Chord):
         self._all_degrees = list(set(self._all_degrees))
 
         # convert notes and interval to m21 primitives
-        print(self._all_degrees)
         self._m21_root = Note(self._root)
         self._m21_degrees = [HarteInterval(x).transposeNote(self._m21_root)
                              for x in self._all_degrees]
@@ -73,7 +71,6 @@ class Harte(Chord):
             self._m21_root)
 
         # initialize the parent constructor
-        print(self._m21_degrees)
         super().__init__(self._m21_degrees, **keywords)
         super().root(self._m21_root)
         super().bass(self._m21_bass)
@@ -177,14 +174,14 @@ class Harte(Chord):
 
         :return:
         """
-        return f'Harte({self._root}:{self._shorthand}:{self._degrees}:{self._bass})'
+        return f'Harte({self._root}:{self._shorthand}({self._degrees})/{self._bass})'
 
     def __str__(self):
         """
 
         :return:
         """
-        return f'{self._root}:{self._shorthand}:{self._degrees}:{self._bass}'
+        return f'{self._root}:{self._shorthand}({self._degrees})/{self._bass}'
 
 
 if __name__ == '__main__':
