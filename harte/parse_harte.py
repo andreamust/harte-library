@@ -1,9 +1,11 @@
-from pathlib import Path
+import os
 
 import more_itertools as mitertools
 from lark import Lark, Transformer
 
-with open(Path.cwd() / 'grammar' / "harte.lark", 'r') as g:
+GRAMMAR = os.path.join(os.path.dirname(__file__), 'harte.lark')
+
+with open(GRAMMAR, 'r') as g:
     HARTE_LARK_GRAMMAR = g.read()
 
 
