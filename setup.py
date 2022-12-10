@@ -17,7 +17,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.7',
-    py_modules=["harte-library"],
+    py_modules=["harte"],
     package_dir={'': 'harte'},
     install_requires=['music21', 'numpy', 'lark'],
 )
