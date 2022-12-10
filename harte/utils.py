@@ -2,6 +2,7 @@
 
 """
 import re
+from typing import List
 
 from harte.mappings import SHORTHAND_DEGREES
 
@@ -45,7 +46,7 @@ def convert_interval(harte_interval: str) -> str:
     return modifier + str(base_degree)
 
 
-def unwrap_shorthand(harte_shorthand: str, harte_degrees: list) -> list:
+def unwrap_shorthand(harte_shorthand: str, harte_degrees: list) -> List[str]:
     """
     TBD
     :param harte_shorthand:

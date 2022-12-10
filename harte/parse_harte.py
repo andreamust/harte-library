@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 import more_itertools as mitertools
 from lark import Lark, Transformer
@@ -33,7 +34,7 @@ class TreeToHarteTransformer(Transformer):
     note = lambda self, elems: {"root": "".join(elems)}
     degree_list = lambda self, elems: elems
 
-    def chord(self, elems):
+    def chord(self, elems) -> Dict:
         d = dict()
         for elem in elems:
             if isinstance(elem, dict):

@@ -2,11 +2,14 @@
 
 """
 
+from typing import List, Union
+
+from music21.chord import Chord, ChordException
+from music21.note import Note
+
 from harte.interval import HarteInterval
 from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from harte.parse_harte import PARSER
-from music21.chord import Chord, ChordException
-from music21.note import Note
 
 
 class Harte(Chord):
@@ -75,7 +78,7 @@ class Harte(Chord):
         super().root(self._m21_root)
         super().bass(self._m21_bass)
 
-    def get_degrees(self) -> list[str]:
+    def get_degrees(self) -> List[str]:
         """
 
         :return:
@@ -147,7 +150,7 @@ class Harte(Chord):
             return self._root + separator + shorthand + clean_harte_degrees
         return self.chord
 
-    def unwrap_shorthand(self) -> list[str] | None:
+    def unwrap_shorthand(self) -> Union[List[str], None]:
         """
 
         :return:
