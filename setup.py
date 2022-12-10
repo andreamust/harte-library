@@ -18,7 +18,8 @@ setuptools.setup(
     ],
     python_requires='>=3.7',
     py_modules=["harte"],
-    package_dir={'harte-library': 'harte'},
-    install_requires=['music21', 'numpy', 'lark'],
+    package_dir={"harte-library": "harte"},
+    install_requires=["music21", "numpy", "lark"],
+    package_data={"": ["*.lark"]},
     include_package_data=True,
 )
