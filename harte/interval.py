@@ -2,11 +2,16 @@
 Extension of the Interval class from music21.interval to support the
 Harte notation.
 """
+import os
+import sys
+from pathlib import Path
 
 from music21.interval import Interval, IntervalException
 from music21.note import Note
 
 from utils import convert_interval
+
+sys.path.append(Path(os.getcwd()) / 'harte')
 
 
 class HarteInterval(Interval):
