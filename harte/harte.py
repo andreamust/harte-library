@@ -2,12 +2,18 @@
 
 """
 
+import sys
+import os
+from pathlib import Path
+
 from music21.chord import Chord, ChordException
 from music21.note import Note
 
 from interval import HarteInterval
 from mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from parse_harte import PARSER
+
+sys.path.append(Path(os.getcwd()) / 'harte')
 
 
 class Harte(Chord):
