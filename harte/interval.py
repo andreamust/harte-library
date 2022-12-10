@@ -9,9 +9,9 @@ from pathlib import Path
 from music21.interval import Interval, IntervalException
 from music21.note import Note
 
-from utils import convert_interval
-
 sys.path.append(Path(os.getcwd()) / 'harte')
+
+from utils import convert_interval
 
 
 class HarteInterval(Interval):

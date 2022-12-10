@@ -2,6 +2,11 @@
 
 """
 import re
+import sys
+import os
+from pathlib import Path
+
+sys.path.append(Path(os.getcwd()) / 'harte')
 
 from mappings import SHORTHAND_DEGREES
 
