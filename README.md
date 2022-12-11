@@ -34,16 +34,52 @@ The main functionalities of the Harte Library are:
 
 ### Interval Module Extension
 
+The Harte Library extends the *Interval Module* of music21 to ensure interoperability between intervals expressed according to Harte notation and the interval class of music21.
+
+The __HarteInterval__ class accepts an interval expressed in Harte Notation as input and allows all the properties and methods of the music21 Interval module to be used:
+
+```python
+from harte.interval import HarteInterval
+
+interval = HarteInterval('b6')
+
+int_name = interval.name
+int_is_consonant = interval.isConsonant()
+```
 
 ### Chord Module Extension
 
+The main functionality of the Harte Library is an extension of the *Chord Module* of music21.
+
+This is possible by means of the class __Harte__, which accepts as input a chord expressed in Harte Notation and allows all properties and methods of the Chord module of music21 to be used:
+
+```python
+from harte.harte import Harte
+
+chord = Harte('C#:maj7(b6)/b3')
+
+bass = chord.bass()  # E
+root = chord.root()  # C#
+name = chord.fullName # Chord {G-sharp | A | E | B-sharp | C-sharp | E-sharp} Quarter
+```
+
+In addition, the library implements new methods specific to Harte notation, including:
+* __get_degrees__: returns the intervals of the chord, disregarding those expressed by the shorthand
+* __get_root__: returns the root of the chord expressed as a string
+* __get_bass__: returns the interval between the root note and the bass note
+* __contains_shorthand__: returns `True` if the chord contains a shorthand, `False` otherwise
+* __get_shorthand__: returns the chord's shorthand, if present
+* __unwrap_shorthand__: returns a list containing all the intervals in the chord, including those wrapped by the shorthand
+* __prettify__: breaks the chord into its components and recomposes it by choosing the most summarised shorthand, if possible.
 
 
-Ideas:
-* harte_simplifier
-* harte extender (from shortcut to extended)
-* harte to pitch class
-* ???
+```python
+from harte.harte import Harte
+
+chord = Harte('D:(b3,5,7,9)')
+
+pretty_harte = chord.prettify()  # D:minmaj7(9)
+```
 
 ## Contributing
 
