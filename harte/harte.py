@@ -31,9 +31,10 @@ class Harte(Chord):
         self.chord = chord
         try:
             parsed_chord = PARSER.parse(chord)
-        except NameError as e:
+        except NameError as name_error:
             raise ChordException(
-                f'The input chord {chord} is not a valid Harte chord from {e}')
+                f'The input chord {chord} is not a valid Harte chord'
+                f' from {name_error}')
 
         assert parsed_chord['root']
 
@@ -53,8 +54,8 @@ class Harte(Chord):
         # if no degrees exist, assume the chord is a major triad
         if self._shorthand:
             assert SHORTHAND_DEGREES[self._shorthand], 'The Harte ' \
-                                                        'shorthand is' \
-                                                        ' not valid. '
+                                                       'shorthand is' \
+                                                       ' not valid. '
             self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
             self._all_degrees = self._shorthand_degrees + self._degrees if \
                 self._degrees else self._shorthand_degrees
