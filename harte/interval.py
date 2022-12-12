@@ -29,7 +29,7 @@ class HarteInterval(Interval):
             self._converted_interval = convert_interval(self._harte_interval)
         except ValueError as value_error:
             raise IntervalException(
-                f'Harte Interval cannot be converted') from value_error
+                'Harte Interval cannot be converted') from value_error
         self._converted_interval = convert_interval(self._harte_interval)
         super().__init__(self._converted_interval, **keywords)
 
