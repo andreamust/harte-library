@@ -1,23 +1,31 @@
 """
-
+Extension of the Chord class from music21.chord to support the
+Harte notation.
 """
+
+from typing import List, Union
+
+from music21.chord import Chord, ChordException
+from music21.note import Note
 
 from harte.interval import HarteInterval
 from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from harte.parse_harte import PARSER
-from music21.chord import Chord, ChordException
-from music21.note import Note
 
 
 class Harte(Chord):
     """
-
+    Extension of the Chord class from music21.chord to support the
+    Harte notation.
     """
 
     def __init__(self, chord: str, **keywords):
         """
-
-        :param chord:
+        Constructor for the Harte class. It takes a Harte chord as input
+        and parses it to extract the root, bass, degrees and shorthand. The
+        constructor of the Chord class is then called to create the chord
+        object
+        :param chord: a music chord annotated according to the Harte notation
         :type chord: str
         """
         self.chord = chord
@@ -75,31 +83,43 @@ class Harte(Chord):
         super().root(self._m21_root)
         super().bass(self._m21_bass)
 
-    def get_degrees(self) -> list[str]:
+    def get_degrees(self) -> List[str]:
         """
-
-        :return:
+        Method to retrieve the degrees of the chord in Harte notation without
+        considering the degrees associated to the shorthand
+        :return: a list of strings representing the degrees of the chord in
+        Harte notation (e.g. ['b3', '5', '7'])
+        :rtype: list[str]
         """
         return self._degrees
 
     def get_root(self) -> str:
         """
-
-        :return:
+        Method to retrieve the root of the chord in Harte notation expressed as
+        a string representing the note name (e.g. 'C#')
+        :return: the root of the chord expressed as a string representing the
+        note name (e.g. 'C#')
+        :rtype: str
         """
         return self._root
 
     def get_bass(self) -> str:
         """
-
-        :return:
+        Method to retrieve the bass of the chord in Harte notation expressed as
+        a string representing the note interval calculated from the root note
+        (e.g. 'b3)
+        :return: the bass of the chord expressed as a string representing the
+        note interval calculated from the root note (e.g. 'b3)
         """
         return self._bass
 
     def bass_is_root(self) -> bool:
         """
-
-        :return:
+        Method to check if the bass of the chord is the same as the root of the
+        chord
+        :return: True if the bass of the chord is the same as the root of the
+        chord, False otherwise
+        :rtype: bool
         """
         if self._bass == self._root:
             return True
@@ -107,24 +127,35 @@ class Harte(Chord):
 
     def contains_shorthand(self) -> bool:
         """
-
-        :return:
+        Method to check if the chord contains a shorthand or not
+        :return: True if the chord contains a shorthand notation, False
+        otherwise
+        :rtype: bool
         """
         if self._shorthand:
             return True
         return False
 
-    def get_shorthand(self) -> str:
+    def get_shorthand(self) -> Union[str, bool]:
         """
-
-        :return:
+        Method to retrieve the shorthand of the chord in Harte notation
+        :return: the shorthand of the chord in Harte notation (e.g. 'maj7')
+        if it exists, None otherwise
+        :rtype: str
         """
         return self._shorthand
 
     def prettify(self) -> str:
         """
-
-        :return:
+        Method to prettify the chord in Harte notation. It decomposes the chord
+        into its constituent parts and returns a string representing the chord
+        in Harte notation summarising the constituent degrees in shorthands,
+        if possible
+        :return: a string representing the chord in Harte notation summarising
+        the constituent degrees in shorthands, if possible. If it is not
+        possible to summarise the chord in a shorthand, the chord is returned
+        in its original form
+        :rtype: str
         """
         separator, shorthand = None, None
         degrees = self._all_degrees
@@ -149,8 +180,11 @@ class Harte(Chord):
 
     def unwrap_shorthand(self) -> list[str] | None:
         """
-
-        :return:
+        Method to retrieve the degrees of the chord in Harte notation, both
+        those associated to the shorthand and those explicitly specified
+        :return: a list of strings representing the degrees of the chord in
+        Harte notation, both those associated to the shorthand and those
+        explicitly specified.
         """
         if self._shorthand:
             return self._all_degrees
@@ -160,9 +194,10 @@ class Harte(Chord):
 
     def __eq__(self, other):
         """
-
-        :param other:
-        :return:
+        Method to check if two HarteChord objects are equal
+        :param other: the other HarteChord object to compare to the current
+        object
+        :return: True if the two HarteChord objects are equal, False otherwise
         """
         if isinstance(other, Harte):
             return self._root == other.get_root() and self._degrees == \
@@ -171,15 +206,15 @@ class Harte(Chord):
 
     def __repr__(self):
         """
-
-        :return:
+        Method to represent the HarteChord object as a string
+        :return: a string representing the HarteChord object
         """
         return f'Harte({self._root}:{self._shorthand}({self._degrees})/{self._bass})'
 
     def __str__(self):
         """
-
-        :return:
+        Method to represent the HarteChord object as a string
+        :return: a string representing the HarteChord object
         """
         return f'{self._root}:{self._shorthand}({self._degrees})/{self._bass}'
 

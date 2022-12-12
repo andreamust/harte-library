@@ -1,5 +1,5 @@
 """
-
+Utility functions for processing Harte Chords
 """
 import re
 from typing import List
@@ -9,10 +9,12 @@ from harte.mappings import SHORTHAND_DEGREES
 
 def convert_interval(harte_interval: str) -> str:
     """
-    TBD
+    Utility function to convert a Harte interval to a music21 interval
     :param harte_interval: an interval of a Harte Chord
     :type harte_interval: str
-    :return:
+    :return: the music21-shaped interval corresponding to the Harte interval
+    format as a string
+    :rtype: str
     """
     regex = r'([#]+)?([b]+)?(\d+)'
     matches = re.findall(regex, harte_interval)[0]
@@ -48,12 +50,14 @@ def convert_interval(harte_interval: str) -> str:
 
 def unwrap_shorthand(harte_shorthand: str, harte_degrees: list) -> List[str]:
     """
-    TBD
-    :param harte_shorthand:
+    DEPRECATED
+    Utility function to unwrap a shorthand notation into a list of degrees
+    :param harte_shorthand: a shorthand notation of a Harte Chord
     :type harte_shorthand: str
-    :param harte_degrees:
+    :param harte_degrees: a list of degrees of a Harte Chord
     :type harte_degrees: list
-    :return:
+    :return: a list of degrees corresponding to the shorthand notation
+    :rtype: List[str]
     """
     if harte_degrees or len(harte_degrees) > 0 and harte_shorthand != '':
         pass

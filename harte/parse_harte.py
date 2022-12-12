@@ -1,5 +1,9 @@
+"""
+Parser for Harte chord data
+"""
+
 import os
-from typing import Dict
+from typing import Dict, List
 
 import more_itertools as mitertools
 from lark import Lark, Transformer
@@ -34,7 +38,15 @@ class TreeToHarteTransformer(Transformer):
     note = lambda self, elems: {"root": "".join(elems)}
     degree_list = lambda self, elems: elems
 
-    def chord(self, elems) -> Dict:
+    @staticmethod
+    def chord(elems: List) -> Dict:
+        """
+        Method to transform a chord parse tree into a Harte chord representation
+        :param elems: the chord parse tree
+        :type elems: list
+        :return: a Harte chord representation
+        :rtype: dict
+        """
         d = dict()
         for elem in elems:
             if isinstance(elem, dict):
