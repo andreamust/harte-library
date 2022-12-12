@@ -1,3 +1,7 @@
+"""
+Setup file for the Harte Library package
+"""
+
 import setuptools
 
 with open("README.md", "r") as fh:

@@ -31,9 +31,9 @@ class Harte(Chord):
         self.chord = chord
         try:
             parsed_chord = PARSER.parse(chord)
-        except NameError:
+        except NameError as e:
             raise ChordException(
-                f'The input chord {chord} is not a valid Harte chord')
+                f'The input chord {chord} is not a valid Harte chord from {e}')
 
         assert parsed_chord['root']
 
@@ -45,25 +45,26 @@ class Harte(Chord):
             'degrees'] if 'degrees' in parsed_chord.keys() else None
         self._bass = parsed_chord[
             'bass'] if 'bass' in parsed_chord.keys() else '1'
-        self._removed_degrees = [x for x in self._degrees if x.startswith(
+        removed_degrees = [x for x in self._degrees if x.startswith(
             '*')] if self._degrees else []
 
         # unwrap shorthand if it exists and merge with degrees
         # if no shorthand exists, just use the degrees
         # if no degrees exist, assume the chord is a major triad
         if self._shorthand:
-            assert self._shorthand in SHORTHAND_DEGREES.keys(), 'The Harte ' \
-                                                                'shorthand is' \
-                                                                ' not valid. '
+            assert SHORTHAND_DEGREES[self._shorthand], 'The Harte ' \
+                                                        'shorthand is' \
+                                                        ' not valid. '
             self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
-            self._all_degrees = self._shorthand_degrees + self._degrees if self._degrees else self._shorthand_degrees
+            self._all_degrees = self._shorthand_degrees + self._degrees if \
+                self._degrees else self._shorthand_degrees
         elif self._degrees:
             self._all_degrees = self._degrees
         else:
             self._all_degrees = ['1', '3', '5']
 
         self._all_degrees = [x for x in self._all_degrees if
-                             x not in self._removed_degrees]
+                             x not in removed_degrees]
         # add root and bass note to the overall list of degrees
         self._all_degrees.append(self._bass)
         self._all_degrees.append('1')
@@ -72,16 +73,16 @@ class Harte(Chord):
         self._all_degrees = list(set(self._all_degrees))
 
         # convert notes and interval to m21 primitives
-        self._m21_root = Note(self._root)
-        self._m21_degrees = [HarteInterval(x).transposeNote(self._m21_root)
-                             for x in self._all_degrees]
-        self._m21_bass = HarteInterval(self._bass).transposeNote(
-            self._m21_root)
+        m21_root = Note(self._root)
+        m21_degrees = [HarteInterval(x).transposeNote(m21_root)
+                       for x in self._all_degrees]
+        m21_bass = HarteInterval(self._bass).transposeNote(
+            m21_root)
 
         # initialize the parent constructor
-        super().__init__(self._m21_degrees, **keywords)
-        super().root(self._m21_root)
-        super().bass(self._m21_bass)
+        super().__init__(m21_degrees, **keywords)
+        super().root(m21_root)
+        super().bass(m21_bass)
 
     def get_degrees(self) -> List[str]:
         """
@@ -171,14 +172,14 @@ class Harte(Chord):
                     clean_harte_degrees.remove('*3')
                 break
         if shorthand:
-            clean_harte_degrees = f'({",".join([x for x in clean_harte_degrees])})' if len(
+            clean_harte_degrees = f'({",".join(clean_harte_degrees)})' if len(
                 clean_harte_degrees) > 0 else ''
             if len(shorthand) > 0 or len(clean_harte_degrees) > 0:
                 separator = ':'
             return self._root + separator + shorthand + clean_harte_degrees
         return self.chord
 
-    def unwrap_shorthand(self) -> list[str] | None:
+    def unwrap_shorthand(self) -> List[str] | None:
         """
         Method to retrieve the degrees of the chord in Harte notation, both
         those associated to the shorthand and those explicitly specified
@@ -188,7 +189,7 @@ class Harte(Chord):
         """
         if self._shorthand:
             return self._all_degrees
-        elif self._degrees:
+        if self._degrees:
             return self._degrees
         return None
 

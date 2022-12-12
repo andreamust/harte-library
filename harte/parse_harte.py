@@ -10,7 +10,7 @@ from lark import Lark, Transformer
 
 GRAMMAR = os.path.join(os.path.dirname(__file__), 'harte.lark')
 
-with open(GRAMMAR, 'r') as g:
+with open(GRAMMAR, 'r', encoding='utf-8') as g:
     HARTE_LARK_GRAMMAR = g.read()
 
 
@@ -28,33 +28,78 @@ class TreeToHarteTransformer(Transformer):
           Modified degrees on the chord (with missing degrees identified with *
            i.e. *3
     """
-    NATURAL = str
-    MODIFIER = str
-    MISSING = str
-    SHORTHAND = lambda self, sh: {"shorthand": str(sh)}
-    INTERVAL = str
-    degree = lambda self, elems: "".join(elems)
-    bass = lambda self, elems: {"bass": "".join(elems)}
-    note = lambda self, elems: {"root": "".join(elems)}
-    degree_list = lambda self, elems: elems
+    @staticmethod
+    def shorthand(shorthand: str) -> Dict[str, str]:
+        """
+        Extract the shorthand from the parse tree
+        :param shorthand: shorthand of the chord
+        :type shorthand: str
+        :return: shorthand of the chord
+        :rtype: str
+        """
+        return {"shorthand": str(shorthand[0])}
 
     @staticmethod
-    def chord(elems: List) -> Dict:
+    def degree(degree: List[str]) -> str:
+        """
+        Extract the degree from the parse tree
+        :param degree: degree of the chord
+        :type degree: str
+        :return: degree of the chord
+        :rtype: str
+        """
+        return ''.join(degree)
+
+    @staticmethod
+    def bass(bass: List[str]) -> Dict[str, str]:
+        """
+        Extract the bass from the parse tree
+        :param bass: bass of the chord
+        :type bass: str
+        :return: bass of the chord
+        :rtype: str
+        """
+        return {'bass': ''.join(bass)}
+
+    @staticmethod
+    def note(root: List[str]) -> Dict[str, str]:
+        """
+        Extract the root from the parse tree
+        :param root: root of the chord
+        :type root: str
+        :return: root of the chord
+        :rtype: str
+        """
+        return {'root': ''.join(root)}
+
+    @staticmethod
+    def degree_list(degrees: List[str]) -> List[str]:
+        """
+        Extract the degrees from the parse tree
+        :param degrees: degrees of the chord
+        :type degrees: list
+        :return: degrees of the chord
+        :rtype: list
+        """
+        return degrees
+
+    @staticmethod
+    def chord(elements: List) -> Dict:
         """
         Method to transform a chord parse tree into a Harte chord representation
-        :param elems: the chord parse tree
-        :type elems: list
+        :param elements: the chord parse tree
+        :type elements: list
         :return: a Harte chord representation
         :rtype: dict
         """
-        d = dict()
-        for elem in elems:
+        chord_dict = {}
+        for elem in elements:
             if isinstance(elem, dict):
-                d.update(**elem)
+                chord_dict.update(**elem)
             elif isinstance(elem, list):
-                d.update({"degrees": list(mitertools.collapse(elem))})
+                chord_dict.update({"degrees": list(mitertools.collapse(elem))})
 
-        return d
+        return chord_dict
 
 
 PARSER = Lark(HARTE_LARK_GRAMMAR,

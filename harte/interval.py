@@ -27,8 +27,9 @@ class HarteInterval(Interval):
         self._harte_interval = harte_interval
         try:
             self._converted_interval = convert_interval(self._harte_interval)
-        except ValueError:
-            raise IntervalException('Harte Interval cannot be converted')
+        except ValueError as e:
+            raise IntervalException(
+                'Harte Interval cannot be converted from {e}')
         self._converted_interval = convert_interval(self._harte_interval)
         super().__init__(self._converted_interval, **keywords)
 
@@ -42,8 +43,7 @@ class HarteInterval(Interval):
         """
         if isinstance(other, HarteInterval):
             return self._harte_interval == other._harte_interval
-        else:
-            return self._harte_interval == other
+        return self._harte_interval == other
 
     def __repr__(self) -> str:
         """
