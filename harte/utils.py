@@ -1,6 +1,8 @@
 """
 Utility functions for processing Harte Chords
 """
+# pylint: disable=consider-iterating-dictionary
+
 import re
 from typing import List
 

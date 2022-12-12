@@ -2,6 +2,7 @@
 Extension of the Chord class from music21.chord to support the
 Harte notation.
 """
+# pylint: disable=consider-using-dict-items
 
 from typing import List, Union
 
@@ -33,8 +34,8 @@ class Harte(Chord):
             parsed_chord = PARSER.parse(chord)
         except NameError as name_error:
             raise ChordException(
-                f'The input chord {chord} is not a valid Harte chord'
-                f' from {name_error}')
+                f'The input chord {chord} is not a valid Harte chord')\
+                from name_error
 
         assert parsed_chord['root']
 
