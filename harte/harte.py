@@ -181,7 +181,7 @@ class Harte(Chord):
             return self._root + separator + shorthand + clean_harte_degrees
         return self.chord
 
-    def unwrap_shorthand(self) -> List[str] | None:
+    def unwrap_shorthand(self) -> Union[List[str], None]:
         """
         Method to retrieve the degrees of the chord in Harte notation, both
         those associated to the shorthand and those explicitly specified
