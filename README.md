@@ -60,7 +60,7 @@ chord = Harte('C#:maj7(b6)/b3')
 
 bass = chord.bass()  # E
 root = chord.root()  # C#
-name = chord.fullName # Chord {G-sharp | A | E | B-sharp | C-sharp | E-sharp} Quarter
+name = chord.fullName  # Chord {G-sharp | A | E | B-sharp | C-sharp | E-sharp} Quarter
 ```
 
 In addition, the library implements new methods specific to Harte notation, including:
