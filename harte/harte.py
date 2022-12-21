@@ -86,6 +86,16 @@ class Harte(Chord):
         super().root(m21_root)
         super().bass(m21_bass)
 
+    def __deepcopy__(self, *args, **kwargs):
+        """
+        Perform a deepcopy of this obect by creating a new identical
+        object with the input chord used for this one.
+
+        :return: A copy of the current object.
+        :rtype: Harte
+        """
+        return Harte(self.chord)
+
     def get_degrees(self) -> List[str]:
         """
         Method to retrieve the degrees of the chord in Harte notation without
