@@ -22,7 +22,7 @@ def test_coverage(chord: str):
     :param chord: Chord to be tested
     :type chord: str
     """
-    assert Harte(chord)
+    Harte(chord)
 
 
 @pytest.mark.parametrize("chord,intervals", 

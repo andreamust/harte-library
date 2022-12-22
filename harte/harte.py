@@ -75,7 +75,10 @@ class Harte(Chord):
             self._all_degrees = list(set(self._all_degrees))
 
             # convert notes and interval to m21 primitives
-            m21_root = Note(self._root)
+            # note that when multiple flats are introduced (i.e. Cbb) music21
+            # won't be able to parse the note.
+            # this is fixed by replacing each 'b' with a '-'.
+            m21_root = Note(self._root.replace("b", "-"))
             m21_degrees = [HarteInterval(x).transposeNote(m21_root)
                         for x in self._all_degrees]
             m21_bass = HarteInterval(self._bass).transposeNote(
