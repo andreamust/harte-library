@@ -5,10 +5,10 @@ chord: note ":" shorthand ("(" degree_list ")")? ("/" bass)?
      | note ("/" bass)?
      | NA
 
-note: NATURAL | NATURAL MODIFIER
+note: NATURAL | NATURAL MODIFIER+
 NATURAL: "A" | "B" | "C" | "D" | "E" | "F" | "G"
 MODIFIER: "b" | "#"
-NA: "N"
+NA: "N" | "X"
 
 bass: degree
 degree_list: degree ("," degree)*
