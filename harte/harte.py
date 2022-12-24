@@ -71,8 +71,8 @@ class Harte(Chord):
             self._all_degrees.append(self._bass)
             self._all_degrees.append('1')
             # sort the list and remove duplicates
-            self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
             self._all_degrees = list(set(self._all_degrees))
+            self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
 
             # convert notes and interval to m21 primitives
             # note that when multiple flats are introduced (i.e. Cbb) music21
@@ -83,6 +83,17 @@ class Harte(Chord):
                         for x in self._all_degrees]
             m21_bass = HarteInterval(self._bass).transposeNote(
                 m21_root)
+            # make sure that order between notes in the chord is respected
+            # by transposing pitches higher than the preceding one when needed
+            for i in range(1, len(m21_degrees)):
+                m21_degrees[i].pitch.octave = m21_degrees[i].pitch.implicitOctave
+                m21_degrees[i].pitch.transposeAboveTarget(
+                    m21_degrees[i - 1].pitch,
+                    inPlace=True)
+            m21_bass.pitch.octave = m21_bass.pitch.implicitOctave
+            if m21_bass != m21_degrees[0]:
+                m21_bass.pitch.transposeBelowTarget(m21_degrees[0].pitch,
+                                                    inPlace=True)
 
             # initialize the parent constructor
             super().__init__(m21_degrees, **keywords)
@@ -239,13 +250,22 @@ class Harte(Chord):
         Method to represent the HarteChord object as a string
         :return: a string representing the HarteChord object
         """
-        return f'{self._root}:{self._shorthand}({self._degrees})/{self._bass}' \
-               if self._root is not None else 'N'
+        if self._root is not None:
+            chord_str = self._root
+            if self._shorthand is not None:
+                chord_str += ':' + self._shorthand
+            if self._degrees is not None:
+                chord_str += '(' + self.degrees + ')'
+            if self._bass != '1':
+                chord_str += '/' + self._bass
+        else:
+            chord_str = 'N'
+
+        return chord_str
 
 
 if __name__ == '__main__':
     # test utilities
-    c = Harte('C:(3,5,7,9,11)/3')
     root = c.get_root()
     print(c.fullName)
     print(c.commonName)

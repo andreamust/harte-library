@@ -26,7 +26,9 @@ def test_coverage(chord: str):
 
 
 @pytest.mark.parametrize("chord,intervals", 
-                         [("C:maj", ["P5", "M3"]),
+                         [("C", ["P5", "M3"]),
+                          ("A", ["P5", "M3"]),
+                          ("C:maj", ["P5", "M3"]),
                           ("C:min", ["P5", "m3"])])
 def test_interval_extraction(chord: str, intervals: List[str]):
     """
@@ -39,7 +41,7 @@ def test_interval_extraction(chord: str, intervals: List[str]):
     :type intervals: List[str]
     """
     chord = Harte(chord)
-    annotated_intervals = chord.annotateIntervals(inPlace=False, 
-                                                  returnList=True, 
+    annotated_intervals = chord.annotateIntervals(inPlace=False,
+                                                  returnList=True,
                                                   stripSpecifiers=False)
     assert set(intervals) == set(annotated_intervals)
