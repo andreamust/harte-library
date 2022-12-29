@@ -27,14 +27,14 @@ def convert_interval(harte_interval: str) -> str:
     if base_degree in [1, 4, 5]:
         if len(matches[0]) == 0 and len(matches[1]) == 0:
             modifier = 'P'
-        elif len(matches[1]) == 1 and len(matches[0]) == 0:
-            modifier = 'A'
         elif len(matches[0]) == 1 and len(matches[1]) == 0:
+            modifier = 'A'
+        elif len(matches[0]) == 0 and len(matches[1]) == 1:
             modifier = 'd'
         elif len(matches[0]) >= 2 and len(matches[1]) == 0:
             new_sharps = matches[0].replace('##', '')
             return convert_interval(f'{new_sharps}{base_degree + 1}')
-        elif len(matches[1]) >= 2 and len(matches[0]) == 0:
+        elif len(matches[0]) == 0 and len(matches[1]) >= 2:
             new_flats = matches[1].replace('bb', '')
             return convert_interval(f'{new_flats}{base_degree - 1}')
         else:
