@@ -1,7 +1,13 @@
-from typing import List
-import os
+"""
+Test cases for the harte module.
+"""
+
 import json
+import os
+from typing import List
+
 import pytest
+
 from harte.harte import Harte
 
 # load a dict of chords frequencies extracted from ChoCo [1]
@@ -25,13 +31,13 @@ def test_coverage(chord: str):
     Harte(chord)
 
 
-@pytest.mark.parametrize("chord,intervals", 
+@pytest.mark.parametrize("chord,intervals",
                          [("C", ["P5", "M3"]),
                           ("A", ["P5", "M3"]),
                           ("C:maj", ["P5", "M3"]),
                           ("C:min", ["P5", "m3"]),
                           ("C:dim", ["d5", "m3"]),
-                          ("C:aug", ["A5", "M3"]),])
+                          ("C:aug", ["A5", "M3"]), ])
 def test_interval_extraction(chord: str, intervals: List[str]):
     """
     Test that the annotateIntervals of music21 correctly works in extracting
