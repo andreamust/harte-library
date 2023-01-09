@@ -268,10 +268,10 @@ class Harte(Chord):
 
 if __name__ == '__main__':
     # test utilities
-    chord = Harte('C:maj7(b3,5,7)')
-    root = chord.get_root()
-    print(chord.fullName)
-    print(chord.commonName)
-    print(chord.inversion())
-    print(root, chord.bass(), chord.get_bass())
-    print(chord.prettify())
+    test_chord = Harte('C:maj7(b3,5,7)')
+    root = test_chord.get_root()
+    print(test_chord.fullName)
+    print(test_chord.commonName)
+    print(test_chord.inversion())
+    print(root, test_chord.bass(), test_chord.get_bass())
+    print(test_chord.prettify())
