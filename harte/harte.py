@@ -34,7 +34,7 @@ class Harte(Chord):
             parsed_chord = PARSER.parse(chord)
         except NameError as name_error:
             raise ChordException(
-                f'The input chord {chord} is not a valid Harte chord')\
+                f'The input chord {chord} is not a valid Harte chord') \
                 from name_error
 
         if "root" in parsed_chord:
@@ -55,8 +55,8 @@ class Harte(Chord):
             # if no degrees exist, assume the chord is a major triad
             if self._shorthand:
                 assert SHORTHAND_DEGREES[self._shorthand], 'The Harte ' \
-                                                        'shorthand is' \
-                                                        ' not valid. '
+                                                           'shorthand is' \
+                                                           ' not valid. '
                 self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
                 self._all_degrees = self._shorthand_degrees + self._degrees if \
                     self._degrees else self._shorthand_degrees
@@ -66,13 +66,14 @@ class Harte(Chord):
                 self._all_degrees = ['1', '3', '5']
 
             self._all_degrees = [x for x in self._all_degrees if
-                                x not in removed_degrees]
+                                 x not in removed_degrees]
             # add root and bass note to the overall list of degrees
             self._all_degrees.append(self._bass)
             self._all_degrees.append('1')
             # sort the list and remove duplicates
             self._all_degrees = list(set(self._all_degrees))
-            self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
+            self._all_degrees.sort(
+                key=lambda x: [k for k in x if k.isdigit()][0])
 
             # convert notes and interval to m21 primitives
             # note that when multiple flats are introduced (i.e. Cbb) music21
@@ -80,13 +81,14 @@ class Harte(Chord):
             # this is fixed by replacing each 'b' with a '-'.
             m21_root = Note(self._root.replace("b", "-"))
             m21_degrees = [HarteInterval(x).transposeNote(m21_root)
-                        for x in self._all_degrees]
+                           for x in self._all_degrees]
             m21_bass = HarteInterval(self._bass).transposeNote(
                 m21_root)
             # make sure that order between notes in the chord is respected
             # by transposing pitches higher than the preceding one when needed
             for i in range(1, len(m21_degrees)):
-                m21_degrees[i].pitch.octave = m21_degrees[i].pitch.implicitOctave
+                m21_degrees[i].pitch.octave = m21_degrees[
+                    i].pitch.implicitOctave
                 m21_degrees[i].pitch.transposeAboveTarget(
                     m21_degrees[i - 1].pitch,
                     inPlace=True)
@@ -255,7 +257,7 @@ class Harte(Chord):
             if self._shorthand is not None:
                 chord_str += ':' + self._shorthand
             if self._degrees is not None:
-                chord_str += '(' + self.degrees + ')'
+                chord_str += '(' + self._degrees + ')'
             if self._bass != '1':
                 chord_str += '/' + self._bass
         else:
@@ -266,9 +268,10 @@ class Harte(Chord):
 
 if __name__ == '__main__':
     # test utilities
-    root = c.get_root()
-    print(c.fullName)
-    print(c.commonName)
-    print(c.inversion())
-    print(root, c.bass(), c.get_bass())
-    print(c.prettify())
+    chord = Harte('C:maj7(b3,5,7)')
+    root = chord.get_root()
+    print(chord.fullName)
+    print(chord.commonName)
+    print(chord.inversion())
+    print(root, chord.bass(), chord.get_bass())
+    print(chord.prettify())
