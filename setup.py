@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="harte-library",
-    version="0.2.3",
+    version="0.2.4",
     author="Andrea Poltronieri",
     description="Library for parsing Harte chords and converting them to Music21",
     long_description=long_description,
