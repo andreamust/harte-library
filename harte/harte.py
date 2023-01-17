@@ -72,8 +72,22 @@ class Harte(Chord):
             self._all_degrees.append('1')
             # sort the list and remove duplicates
             self._all_degrees = list(set(self._all_degrees))
+
+            # sort the list of degrees according to the degree number
+            def degree_to_sort_key(degree: str) -> float:
+                # extract number from degree
+                degree_number = int("".join([k for k in degree if k.isdigit()]))
+
+                # extract accidental from degree
+                if degree.startswith('b'):
+                    degree_number -= 0.49
+                elif degree.startswith('#'):
+                    degree_number += 0.49
+                
+                return degree_number
+
             self._all_degrees.sort(
-                key=lambda x: [k for k in x if k.isdigit()][0])
+                key=lambda x: degree_to_sort_key(x))
 
             # convert notes and interval to m21 primitives
             # note that when multiple flats are introduced (i.e. Cbb) music21
