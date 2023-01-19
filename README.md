@@ -8,6 +8,8 @@
 
 Extension of the [music21 library](http://web.mit.edu/music21/) for working with music chords encoded according to the [Harte Notation](https://ismir2005.ismir.net/proceedings/1080.pdf).
 
+This project is part of [ChoCo](https://github.com/smashub/choco), a database of 20K+ timed chord annotations of integrated and standardised scores and tracks.
+
 The Harte Library mainly extends the *Chord module* of muisc21. In addition, the *Interval module* is also extended to support intervals as represented in the chords encoded in Harte.
 
 The library has the following dependencies:
