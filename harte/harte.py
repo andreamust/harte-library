@@ -38,7 +38,13 @@ class Harte(Chord):
                 f'The input chord {chord} is not a valid Harte chord') \
                 from name_error
 
-        if "root" in parsed_chord:
+        if self.chord == 'N':
+            self._root = self._bass = self._degrees = self._shorthand = None
+            self._all_degrees = []
+            super().__init__(self._all_degrees)
+            return
+
+        elif "root" in parsed_chord:
             # chord is not empty
             # retrieve information from the parsed chord
             self._root = parsed_chord['root']
@@ -270,6 +276,7 @@ if __name__ == '__main__':
     # test utilities
     test_chord = Harte('N')
     root = test_chord.get_root()
+    print(test_chord.pitchNames)
     print(test_chord.fullName)
     print(test_chord.commonName)
     print(test_chord.inversion())

@@ -8,7 +8,7 @@ from typing import List
 
 import pytest
 
-from harte.harte_core import Harte
+from harte.harte import Harte
 
 # load a dict of chords frequencies extracted from ChoCo [1]
 # to test coverage of a big set of chords
@@ -37,7 +37,8 @@ def test_coverage(chord: str):
                           ("C:maj", ["P5", "M3"]),
                           ("C:min", ["P5", "m3"]),
                           ("C:dim", ["d5", "m3"]),
-                          ("C:aug", ["A5", "M3"]), ])
+                          ("C:aug", ["A5", "M3"]),
+                          ("N", [])])
 def test_interval_extraction(chord: str, intervals: List[str]):
     """
     Test that the annotateIntervals of music21 correctly works in extracting
