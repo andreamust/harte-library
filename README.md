@@ -56,7 +56,7 @@ The main functionality of the Harte Library is an extension of the *Chord Module
 This is possible by means of the class __Harte__, which accepts as input a chord expressed in Harte Notation and allows all properties and methods of the Chord module of music21 to be used:
 
 ```python
-from harte.harte import Harte
+from harte.harte_core import Harte
 
 chord = Harte('C#:maj7(b6)/b3')
 
@@ -74,9 +74,8 @@ In addition, the library implements new methods specific to Harte notation, incl
 * __unwrap_shorthand__: returns a list containing all the intervals in the chord, including those wrapped by the shorthand
 * __prettify__: breaks the chord into its components and recomposes it by choosing the most summarised shorthand, if possible.
 
-
 ```python
-from harte.harte import Harte
+from harte.harte_core import Harte
 
 chord = Harte('D:(b3,5,7,9)')
 

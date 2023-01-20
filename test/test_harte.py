@@ -8,7 +8,7 @@ from typing import List
 
 import pytest
 
-from harte.harte import Harte
+from harte.harte_core import Harte
 
 # load a dict of chords frequencies extracted from ChoCo [1]
 # to test coverage of a big set of chords
@@ -54,9 +54,13 @@ def test_interval_extraction(chord: str, intervals: List[str]):
                                                   stripSpecifiers=False)
     assert set(intervals) == set(annotated_intervals)
 
-@pytest.mark.parametrize("chord,pitches", [("F:(b3, 5, b7, 11)", ["F", "A-", "C", "E-", "B-"]),
-                                           ("F:(b3, 11, b7, 5)", ["F", "A-", "C", "E-", "B-"]),
-                                           ("F:maj7(#11)", ["F", "A", "C", "E", "B"])])
+
+@pytest.mark.parametrize("chord,pitches", [("F:(b3, 5, b7, 11)",
+                                            ["F", "A-", "C", "E-", "B-"]),
+                                           ("F:(b3, 11, b7, 5)",
+                                            ["F", "A-", "C", "E-", "B-"]),
+                                           ("F:maj7(#11)",
+                                            ["F", "A", "C", "E", "B"])])
 def test_ordering_of_degrees(chord: str, pitches: List[str]):
     """
     Test that the parsed degrees are ordered correctly in the resulting m21 object.
