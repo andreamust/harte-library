@@ -44,7 +44,7 @@ class Harte(Chord):
             super().__init__(self._all_degrees)
             return
 
-        elif "root" in parsed_chord:
+        if "root" in parsed_chord:
             # chord is not empty
             # retrieve information from the parsed chord
             self._root = parsed_chord['root']
