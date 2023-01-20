@@ -75,6 +75,13 @@ class Harte(Chord):
 
             # sort the list of degrees according to the degree number
             def degree_to_sort_key(degree: str) -> float:
+                """
+                Utility function for ordering degrees of a chord
+                :param degree: a chord degree
+                :type defree: str
+                :return: a numerical value needed for ordering the degree
+                :rtype: float
+                """
                 # extract number from degree
                 degree_number = int("".join([k for k in degree if k.isdigit()]))
 
