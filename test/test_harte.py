@@ -53,3 +53,18 @@ def test_interval_extraction(chord: str, intervals: List[str]):
                                                   returnList=True,
                                                   stripSpecifiers=False)
     assert set(intervals) == set(annotated_intervals)
+
+@pytest.mark.parametrize("chord,pitches", [("F:(b3, 5, b7, 11)", ["F", "A-", "C", "E-", "B-"]),
+                                           ("F:(b3, 11, b7, 5)", ["F", "A-", "C", "E-", "B-"]),
+                                           ("F:maj7(#11)", ["F", "A", "C", "E", "B"])])
+def test_ordering_of_degrees(chord: str, pitches: List[str]):
+    """
+    Test that the parsed degrees are ordered correctly in the resulting m21 object.
+
+    :param chord: Input chord
+    :type chord: str
+    :param pitches: Pitches that should be part of the chord
+    :type pitches: List[str]
+    """
+    chord = Harte(chord)
+    assert [p.name for p in chord.pitches] == pitches
