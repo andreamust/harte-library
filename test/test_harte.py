@@ -64,7 +64,8 @@ def test_interval_extraction(chord: str, intervals: List[str]):
                                             ["F", "A", "C", "E", "B"])])
 def test_ordering_of_degrees(chord: str, pitches: List[str]):
     """
-    Test that the parsed degrees are ordered correctly in the resulting m21 object.
+    Test that the parsed degrees are ordered correctly in the resulting m21
+    object.
 
     :param chord: Input chord
     :type chord: str

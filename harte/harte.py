@@ -13,6 +13,7 @@ from harte.interval import HarteInterval
 from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from harte.parse_harte import PARSER
 from harte.utils import degree_to_sort_key
+from harte.exceptions import ChordEmptyError
 
 
 class Harte(Chord):
@@ -37,12 +38,6 @@ class Harte(Chord):
             raise ChordException(
                 f'The input chord {chord} is not a valid Harte chord') \
                 from name_error
-
-        if self.chord == 'N':
-            self._root = self._bass = self._degrees = self._shorthand = None
-            self._all_degrees = []
-            super().__init__(self._all_degrees)
-            return
 
         if "root" in parsed_chord:
             # chord is not empty
@@ -108,16 +103,11 @@ class Harte(Chord):
             super().root(m21_root)
             super().bass(m21_bass)
         else:
-            # chord is empty
-            self._root = None
-            self._shorthand = None
-            self._degrees = None
-            self._bass = None
-            super().__init__(**keywords)
+            raise ChordEmptyError(chord)
 
     def __deepcopy__(self, *args, **kwargs):
         """
-        Perform a deepcopy of this obect by creating a new identical
+        Perform a deepcopy of this object by creating a new identical
         object with the input chord used for this one.
 
         :return: A copy of the current object.
@@ -276,6 +266,7 @@ if __name__ == '__main__':
     # test utilities
     test_chord = Harte('N')
     root = test_chord.get_root()
+    print(test_chord.root().pitchClass)
     print(test_chord.pitchNames)
     print(test_chord.fullName)
     print(test_chord.commonName)
