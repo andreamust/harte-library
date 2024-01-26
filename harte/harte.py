@@ -10,7 +10,7 @@ from music21.chord import Chord, ChordException
 from music21.note import Note
 
 from harte.interval import HarteInterval
-from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
+from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP, TRIAD_SHORTHANDS
 from harte.parse_harte import PARSER
 from harte.utils import degree_to_sort_key
 from harte.exceptions import ChordEmptyError
@@ -223,6 +223,31 @@ class Harte(Chord):
         if self._degrees:
             return self._degrees
         return None
+
+    def as_triad(self) -> 'Harte':
+        """
+        Create a copy of this object where everything but the triad is removed.
+        For example, C:min13(b9) -> C:min.
+        If it is not possible an exception is raised.
+        :return: a new Harte instance where only the triad elements are present.
+        """
+        # compute the overlap between the degrees in the current chord
+        # and the degrees that are supposed to be in a triad
+        degree_overlap = (
+            (shorthand, len(set(SHORTHAND_DEGREES[shorthand]).intersection(self.unwrap_shorthand())))
+            for shorthand in TRIAD_SHORTHANDS
+        )
+
+        # get the overlaps with three elements
+        overlap_matches = [s for s, l in degree_overlap if l == 3]
+
+        if len(overlap_matches) == 0:
+            raise ValueError(f"The chord {self} cannot be represented as a triad.")
+        elif len(overlap_matches) > 1:
+            raise ValueError(f"The chord {self} matches with more than one triad: {overlap_matches}")
+
+        matched_shorthand = overlap_matches[0]
+        return Harte(f"{self.get_root()}:{matched_shorthand}")
 
     def __eq__(self, other):
         """
