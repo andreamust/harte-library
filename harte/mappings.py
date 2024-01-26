@@ -78,6 +78,8 @@ SHORTHAND_DEGREE_MAP = {
 
 TRIAD_SHORTHANDS = ['maj', 'min', 'aug', 'dim']
 
+TETRAD_SHORTHANDS = TRIAD_SHORTHANDS + ['maj7', 'min7', '7', 'hdim7']
+
 DEGREE_SHORTHAND_MAP = OrderedDict({
     ('3', '5', 'b7', '9'): '9',
     ('3', '5', '7', '9'): 'maj9',
