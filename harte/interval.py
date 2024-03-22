@@ -6,7 +6,7 @@ Harte notation.
 from music21.interval import Interval, IntervalException
 from music21.note import Note
 
-from harte.utils import convert_interval
+from utils import convert_interval
 
 
 class HarteInterval(Interval):
@@ -29,7 +29,8 @@ class HarteInterval(Interval):
             self._converted_interval = convert_interval(self._harte_interval)
         except ValueError as value_error:
             raise IntervalException(
-                'Harte Interval cannot be converted') from value_error
+                "Harte Interval cannot be converted"
+            ) from value_error
         self._converted_interval = convert_interval(self._harte_interval)
         super().__init__(self._converted_interval, **keywords)
 
@@ -50,7 +51,7 @@ class HarteInterval(Interval):
         Returns a string representation of the HarteInterval object
         :return: A string representation of the HarteInterval object
         """
-        return f'HarteInterval({self._harte_interval})'
+        return f"HarteInterval({self._harte_interval})"
 
     def __str__(self) -> str:
         """
@@ -60,6 +61,6 @@ class HarteInterval(Interval):
         return self._harte_interval
 
 
-if __name__ == '__main__':
-    i = HarteInterval('3').transposeNote(Note('C'))
+if __name__ == "__main__":
+    i = HarteInterval("3").transposeNote(Note("C"))
     print(i)
