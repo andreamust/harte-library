@@ -2,16 +2,16 @@
 Extension of the Chord class from music21.chord to support the
 Harte notation.
 """
-# pylint: disable=consider-using-dict-items
 
+# pylint: disable=consider-using-dict-items
 from typing import List, Union
 
 from music21.chord import Chord, ChordException
 from music21.note import Note
 
-from harte.interval import HarteInterval
-from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
-from harte.parse_harte import PARSER
+from interval import HarteInterval
+from mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
+from parse_harte import PARSER
 
 
 class Harte(Chord):
@@ -30,46 +30,64 @@ class Harte(Chord):
         :type chord: str
         """
         self.chord = chord
+        self._root = None
+        self._bass = None
+        self._all_degrees = ["1"]
+        self._shorthand = []
+        self._degrees = []
+        self._shorthand_degrees = []
+
+        # parse the chord
         try:
             parsed_chord = PARSER.parse(chord)
         except NameError as name_error:
             raise ChordException(
-                f'The input chord {chord} is not a valid Harte chord')\
-                from name_error
+                f"The input chord {chord} is not a valid Harte chord"
+            ) from name_error
 
+        # chord is not empty
         if "root" in parsed_chord:
-            # chord is not empty
             # retrieve information from the parsed chord
-            self._root = parsed_chord['root']
-            self._shorthand = parsed_chord[
-                'shorthand'] if 'shorthand' in parsed_chord.keys() else None
-            self._degrees = parsed_chord[
-                'degrees'] if 'degrees' in parsed_chord.keys() else None
-            self._bass = parsed_chord[
-                'bass'] if 'bass' in parsed_chord.keys() else '1'
-            removed_degrees = [x for x in self._degrees if x.startswith(
-                '*')] if self._degrees else []
+            self._root = parsed_chord["root"]
+            self._shorthand = parsed_chord.get("shorthand", None)
+            self._degrees = parsed_chord.get("degrees")
+            self._bass = parsed_chord.get("bass", "1")
+            removed_degrees = (
+                [x.replace("*", "") for x in self._degrees if x.startswith("*")]
+                if self._degrees
+                else []
+            )
+            print(removed_degrees)
+            print(f"Root: {self._root}")
+            print(f"Shorthand: {self._shorthand}")
+            print(f"Degrees: {self._degrees}")
+            print(f"Bass: {self._bass}")
 
             # unwrap shorthand if it exists and merge with degrees
-            # if no shorthand exists, just use the degrees
-            # if no degrees exist, assume the chord is a major triad
             if self._shorthand:
-                assert SHORTHAND_DEGREES[self._shorthand], 'The Harte ' \
-                                                        'shorthand is' \
-                                                        ' not valid. '
+                assert SHORTHAND_DEGREES[
+                    self._shorthand
+                ], "The Harte shorthand is not valid."
                 self._shorthand_degrees = SHORTHAND_DEGREES[self._shorthand]
-                self._all_degrees = self._shorthand_degrees + self._degrees if \
-                    self._degrees else self._shorthand_degrees
-            elif self._degrees:
-                self._all_degrees = self._degrees
+                self._all_degrees += self._shorthand_degrees + self._degrees
+            # if no shorthand exists, just use the degrees
+            elif self._degrees and len(self._degrees) > len(removed_degrees):
+                self._all_degrees += self._degrees
+            # if no degrees exist, assume the chord is a major triad
             else:
-                self._all_degrees = ['1', '3', '5']
+                self._all_degrees += ["3", "5"]
 
-            self._all_degrees = [x for x in self._all_degrees if
-                                x not in removed_degrees]
+            print(f"All degrees: {self._all_degrees}")
+
+            # remove the degrees included in removed_degrees and the ones that start with '*'
+            self._all_degrees = [
+                x
+                for x in set(self._all_degrees)
+                if x not in removed_degrees and x[0] != "*"
+            ]
             # add root and bass note to the overall list of degrees
             self._all_degrees.append(self._bass)
-            self._all_degrees.append('1')
+            print(f"All degrees: {self._all_degrees}")
             # sort the list and remove duplicates
             self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
             self._all_degrees = list(set(self._all_degrees))
@@ -79,10 +97,12 @@ class Harte(Chord):
             # won't be able to parse the note.
             # this is fixed by replacing each 'b' with a '-'.
             m21_root = Note(self._root.replace("b", "-"))
-            m21_degrees = [HarteInterval(x).transposeNote(m21_root)
-                        for x in self._all_degrees]
-            m21_bass = HarteInterval(self._bass).transposeNote(
-                m21_root)
+            m21_degrees = [
+                HarteInterval(x).transposeNote(m21_root) for x in self._all_degrees
+            ]
+            m21_bass = HarteInterval(self._bass).transposeNote(m21_root)
+            if m21_root != m21_bass:
+                m21_bass._setOctave(3)
 
             # initialize the parent constructor
             super().__init__(m21_degrees, **keywords)
@@ -90,11 +110,7 @@ class Harte(Chord):
             super().bass(m21_bass)
         else:
             # chord is empty
-            self._root = None
-            self._shorthand = None
-            self._degrees = None
-            self._bass = None
-            super().__init__(**keywords)
+            super().__init__()
 
     def __deepcopy__(self, *args, **kwargs):
         """
@@ -114,7 +130,7 @@ class Harte(Chord):
         Harte notation (e.g. ['b3', '5', '7'])
         :rtype: list[str]
         """
-        return self._degrees
+        return self._degrees if self._degrees else None
 
     def get_root(self) -> str:
         """
@@ -124,7 +140,7 @@ class Harte(Chord):
         note name (e.g. 'C#')
         :rtype: str
         """
-        return self._root
+        return self._root if self._root else None
 
     def get_bass(self) -> str:
         """
@@ -134,7 +150,7 @@ class Harte(Chord):
         :return: the bass of the chord expressed as a string representing the
         note interval calculated from the root note (e.g. 'b3)
         """
-        return self._bass
+        return self._bass if self._bass else None
 
     def bass_is_root(self) -> bool:
         """
@@ -144,9 +160,7 @@ class Harte(Chord):
         chord, False otherwise
         :rtype: bool
         """
-        if self._bass == self._root:
-            return True
-        return False
+        return self._root == self._bass
 
     def contains_shorthand(self) -> bool:
         """
@@ -155,9 +169,7 @@ class Harte(Chord):
         otherwise
         :rtype: bool
         """
-        if self._shorthand:
-            return True
-        return False
+        return self._shorthand is not None
 
     def get_shorthand(self) -> Union[str, bool]:
         """
@@ -181,23 +193,26 @@ class Harte(Chord):
         :rtype: str
         """
         separator, shorthand = None, None
+        assert self._all_degrees, "The chord is empty: no degrees to prettify."
         degrees = self._all_degrees
-        if '1' in degrees:
-            degrees.remove('1')
+        if "1" in degrees:
+            degrees.remove("1")
         for grades in DEGREE_SHORTHAND_MAP.keys():
             intersection = set(grades).intersection(degrees)
             if len(intersection) == len(grades):
                 shorthand = DEGREE_SHORTHAND_MAP[grades]
-                clean_harte_degrees = list(
-                    set(degrees) - intersection)
-                if 'sus' in shorthand and '*3' in clean_harte_degrees:
-                    clean_harte_degrees.remove('*3')
+                clean_harte_degrees = list(set(degrees) - intersection)
+                if "sus" in shorthand and "*3" in clean_harte_degrees:
+                    clean_harte_degrees.remove("*3")
                 break
         if shorthand:
-            clean_harte_degrees = f'({",".join(clean_harte_degrees)})' if len(
-                clean_harte_degrees) > 0 else ''
+            clean_harte_degrees = (
+                f'({",".join(clean_harte_degrees)})'
+                if len(clean_harte_degrees) > 0
+                else ""
+            )
             if len(shorthand) > 0 or len(clean_harte_degrees) > 0:
-                separator = ':'
+                separator = ":"
             return self._root + separator + shorthand + clean_harte_degrees
         return self.chord
 
@@ -223,8 +238,11 @@ class Harte(Chord):
         :return: True if the two HarteChord objects are equal, False otherwise
         """
         if isinstance(other, Harte):
-            return self._root == other.get_root() and self._degrees == \
-                other.get_degrees() and self._bass == other.get_bass()
+            return (
+                self._root == other.get_root()
+                and self._degrees == other.get_degrees()
+                and self._bass == other.get_bass()
+            )
         return False
 
     def __repr__(self):
@@ -232,23 +250,28 @@ class Harte(Chord):
         Method to represent the HarteChord object as a string
         :return: a string representing the HarteChord object
         """
-        return f'Harte({str(self)})'
+        return f"Harte({str(self)})"
 
     def __str__(self):
         """
         Method to represent the HarteChord object as a string
         :return: a string representing the HarteChord object
         """
-        return f'{self._root}:{self._shorthand}({self._degrees})/{self._bass}' \
-               if self._root is not None else 'N'
+        return (
+            f"{self._root}:{self._shorthand}({self._degrees})/{self._bass}"
+            if self._root is not None
+            else "N"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # test utilities
-    c = Harte('C:(3,5,7,9,11)/3')
+    c = Harte("C:maj7(*5)/3")
     root = c.get_root()
     print(c.fullName)
     print(c.commonName)
+    print(c.pitches)
+    print([x.midi for x in c.pitches])
     print(c.inversion())
     print(root, c.bass(), c.get_bass())
     print(c.prettify())
