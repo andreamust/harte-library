@@ -97,15 +97,14 @@ class Harte(Chord):
             m21_bass = HarteInterval(self._bass).transposeNote(m21_root)
             if m21_root != m21_bass:
                 m21_bass.octave = 3
-            print("octaves", m21_bass.pitch.midi, m21_root.pitch.midi)
 
             # initialize the parent constructor
             super().__init__(m21_degrees, **keywords)
             super().root(m21_root)
             super().bass(m21_bass)
             # set octave of root and bass to 4 and 3 respectively
-            super().root().octave = 4
             super().bass().octave = 3
+            super().root().octave = 4
 
         else:
             # chord is empty
@@ -130,6 +129,13 @@ class Harte(Chord):
         :rtype: list[str]
         """
         return self._degrees if self._degrees else None
+
+    def get_midi_pitches(self) -> List[int]:
+        """
+        Method to retrieve the MIDI pitches of the chord
+        :return: a list of integers representing the MIDI pitches of the chord
+        """
+        return sorted([x.midi for x in self.pitches])
 
     def get_root(self) -> str:
         """
@@ -265,12 +271,12 @@ class Harte(Chord):
 
 if __name__ == "__main__":
     # test utilities
-    c = Harte("C:maj7(*5)/3")
+    c = Harte("C:maj7(*5)/7")
     root = c.get_root()
     print(c.fullName)
     print(c.commonName)
     print(c.pitches)
-    print([x.midi for x in c.pitches])
+    print(c.get_midi_pitches())
     print(c.inversion())
     print(root, c.bass(), c.get_bass())
     print(c.prettify())
