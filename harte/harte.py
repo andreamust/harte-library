@@ -280,11 +280,10 @@ class Harte(Chord):
 if __name__ == "__main__":
     # test utilities
     c = Harte("C:maj7(*5)/7")
-    root = c.get_root()
     print(c.fullName)
     print(c.commonName)
     print(c.pitches)
     print(c.get_midi_pitches())
     print(c.inversion())
-    print(root, c.bass(), c.get_bass())
+    print(c.bass(), c.get_bass())
     print(c.prettify())
