@@ -7,7 +7,7 @@ Utility functions for processing Harte Chords
 import re
 from typing import List
 
-from mappings import SHORTHAND_DEGREES
+from harte.mappings import SHORTHAND_DEGREES
 
 
 def convert_interval(harte_interval: str) -> str:
@@ -75,6 +75,46 @@ def unwrap_shorthand(harte_shorthand: str, harte_degrees: list) -> List[str]:
     degrees = list(set(shorthand_degrees + harte_degrees))
     degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
     return degrees
+
+
+def degree_to_sort_key(degree: str) -> float:
+    """
+    Utility function for ordering degrees of a chord
+    :param degree: a chord degree
+    :type defree: str
+    :return: a numerical value needed for ordering the degree
+    :rtype: float
+    """
+    # extract number from degree
+    degree_number = int("".join([k for k in degree if k.isdigit()]))
+
+    # extract accidental from degree
+    if degree.startswith("b"):
+        degree_number -= 0.49
+    elif degree.startswith("#"):
+        degree_number += 0.49
+
+    return degree_number
+
+
+def degree_to_sort_key(degree: str) -> float:
+    """
+    Utility function for ordering degrees of a chord
+    :param degree: a chord degree
+    :type defree: str
+    :return: a numerical value needed for ordering the degree
+    :rtype: float
+    """
+    # extract number from degree
+    degree_number = int("".join([k for k in degree if k.isdigit()]))
+
+    # extract accidental from degree
+    if degree.startswith("b"):
+        degree_number -= 0.49
+    elif degree.startswith("#"):
+        degree_number += 0.49
+
+    return degree_number
 
 
 if __name__ == "__main__":

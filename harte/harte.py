@@ -9,9 +9,11 @@ from typing import List, Union
 from music21.chord import Chord, ChordException
 from music21.note import Note
 
-from interval import HarteInterval
-from mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
-from parse_harte import PARSER
+from harte.interval import HarteInterval
+from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
+from harte.parse_harte import PARSER
+from harte.utils import degree_to_sort_key
+from harte.exceptions import ChordEmptyError
 
 
 class Harte(Chord):
@@ -82,8 +84,8 @@ class Harte(Chord):
             self._all_degrees.append(self._bass)
 
             # sort the list and remove duplicates
-            self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
             self._all_degrees = list(set(self._all_degrees))
+            self._all_degrees.sort(key=degree_to_sort_key)
 
             # convert notes and interval to m21 primitives
             # note that when multiple flats are introduced (i.e. Cbb) music21
@@ -112,7 +114,7 @@ class Harte(Chord):
 
     def __deepcopy__(self, *args, **kwargs):
         """
-        Perform a deepcopy of this obect by creating a new identical
+        Perform a deepcopy of this object by creating a new identical
         object with the input chord used for this one.
 
         :return: A copy of the current object.
@@ -262,11 +264,18 @@ class Harte(Chord):
         Method to represent the HarteChord object as a string
         :return: a string representing the HarteChord object
         """
-        return (
-            f"{self._root}:{self._shorthand}({self._degrees})/{self._bass}"
-            if self._root is not None
-            else "N"
-        )
+        if self._root is not None:
+            chord_str = self._root
+            if self._shorthand is not None:
+                chord_str += ":" + self._shorthand
+            if self._degrees is not None:
+                chord_str += "(" + self._degrees + ")"
+            if self._bass != "1":
+                chord_str += "/" + self._bass
+        else:
+            chord_str = "N"
+
+        return chord_str
 
 
 if __name__ == "__main__":

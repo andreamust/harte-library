@@ -8,6 +8,8 @@
 
 Extension of the [music21 library](http://web.mit.edu/music21/) for working with music chords encoded according to the [Harte Notation](https://ismir2005.ismir.net/proceedings/1080.pdf).
 
+This project is part of [ChoCo](https://github.com/smashub/choco), a dataset of 20K+ timed chord annotations of integrated and standardised scores and tracks.
+
 The Harte Library mainly extends the *Chord module* of muisc21. In addition, the *Interval module* is also extended to support intervals as represented in the chords encoded in Harte.
 
 The library has the following dependencies:
@@ -71,7 +73,6 @@ In addition, the library implements new methods specific to Harte notation, incl
 * __get_shorthand__: returns the chord's shorthand, if present
 * __unwrap_shorthand__: returns a list containing all the intervals in the chord, including those wrapped by the shorthand
 * __prettify__: breaks the chord into its components and recomposes it by choosing the most summarised shorthand, if possible.
-
 
 ```python
 from harte.harte import Harte
