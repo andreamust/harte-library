@@ -57,11 +57,6 @@ class Harte(Chord):
                 if self._degrees
                 else []
             )
-            print(removed_degrees)
-            print(f"Root: {self._root}")
-            print(f"Shorthand: {self._shorthand}")
-            print(f"Degrees: {self._degrees}")
-            print(f"Bass: {self._bass}")
 
             # unwrap shorthand if it exists and merge with degrees
             if self._shorthand:
@@ -77,8 +72,6 @@ class Harte(Chord):
             else:
                 self._all_degrees += ["3", "5"]
 
-            print(f"All degrees: {self._all_degrees}")
-
             # remove the degrees included in removed_degrees and the ones that start with '*'
             self._all_degrees = [
                 x
@@ -87,7 +80,7 @@ class Harte(Chord):
             ]
             # add root and bass note to the overall list of degrees
             self._all_degrees.append(self._bass)
-            print(f"All degrees: {self._all_degrees}")
+
             # sort the list and remove duplicates
             self._all_degrees.sort(key=lambda x: [k for k in x if k.isdigit()][0])
             self._all_degrees = list(set(self._all_degrees))
@@ -96,18 +89,24 @@ class Harte(Chord):
             # note that when multiple flats are introduced (i.e. Cbb) music21
             # won't be able to parse the note.
             # this is fixed by replacing each 'b' with a '-'.
-            m21_root = Note(self._root.replace("b", "-"))
+            m21_root = Note(self._root.replace("b", "-"), octave=4)
             m21_degrees = [
-                HarteInterval(x).transposeNote(m21_root) for x in self._all_degrees
+                HarteInterval(x, octave=4).transposeNote(m21_root)
+                for x in self._all_degrees
             ]
             m21_bass = HarteInterval(self._bass).transposeNote(m21_root)
             if m21_root != m21_bass:
-                m21_bass._setOctave(3)
+                m21_bass.octave = 3
+            print("octaves", m21_bass.pitch.midi, m21_root.pitch.midi)
 
             # initialize the parent constructor
             super().__init__(m21_degrees, **keywords)
             super().root(m21_root)
             super().bass(m21_bass)
+            # set octave of root and bass to 4 and 3 respectively
+            super().root().octave = 4
+            super().bass().octave = 3
+
         else:
             # chord is empty
             super().__init__()
