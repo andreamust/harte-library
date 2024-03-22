@@ -13,7 +13,6 @@ from harte.interval import HarteInterval
 from harte.mappings import SHORTHAND_DEGREES, DEGREE_SHORTHAND_MAP
 from harte.parse_harte import PARSER
 from harte.utils import degree_to_sort_key
-from harte.exceptions import ChordEmptyError
 
 
 class Harte(Chord):
