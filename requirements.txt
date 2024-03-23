@@ -1,5 +1,5 @@
 lark~=1.1.2
 music21~=8.1.0
 setuptools
-numpy~=1.23.5
+numpy~=1.25.0
 pytest~=7.1.3
