@@ -51,7 +51,7 @@ class Harte(Chord):
             # retrieve information from the parsed chord
             self._root = parsed_chord["root"]
             self._shorthand = parsed_chord.get("shorthand", None)
-            self._degrees = parsed_chord.get("degrees")
+            self._degrees = parsed_chord.get("degrees", [])
             self._bass = parsed_chord.get("bass", "1")
             removed_degrees = (
                 [x.replace("*", "") for x in self._degrees if x.startswith("*")]
@@ -279,7 +279,7 @@ class Harte(Chord):
 
 if __name__ == "__main__":
     # test utilities
-    c = Harte("C:maj7(*5)/7")
+    c = Harte("C#:(b6)")
     print(c.fullName)
     print(c.commonName)
     print(c.pitches)
