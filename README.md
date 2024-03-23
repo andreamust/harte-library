@@ -5,40 +5,38 @@
 [![PyPi version](https://badgen.net/pypi/v/pip/)](https://pypi.org/andreamust/harte-library)
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 
+The **Harte Library** is an extension of the [music21 library](http://web.mit.edu/music21/) tailored for working with music chords encoded according to the [Harte Notation](https://ismir2005.ismir.net/proceedings/1080.pdf).
 
-Extension of the [music21 library](http://web.mit.edu/music21/) for working with music chords encoded according to the [Harte Notation](https://ismir2005.ismir.net/proceedings/1080.pdf).
-
-This project is part of [ChoCo](https://github.com/smashub/choco), a dataset of 20K+ timed chord annotations of integrated and standardised scores and tracks.
-
-The Harte Library mainly extends the *Chord module* of muisc21. In addition, the *Interval module* is also extended to support intervals as represented in the chords encoded in Harte.
+This project is a component of [ChoCo](https://github.com/smashub/choco), a comprehensive dataset containing over 20,000 timed chord annotations sourced from integrated and standardized scores and tracks.
 
 The library has the following dependencies:
+
 - [music21](http://web.mit.edu/music21/): as an extension of the library itself;
 - [Lark](https://github.com/lark-parser/lark): for parsing the chords in Harte.
 
 ## Installation
 
-The library has been uploaded to PyPi, therefore for installation simply launch:
+The library is available on PyPi. To install, simply execute the following command:
 
 ```bash
-pip install harte-library
+pip install harte-library --upgrade
 ```
 
-## Main Functionalities
+## 🔑 Key Features
 
-The main functionalities of the Harte Library are:
+The Harte Library offers several core functionalities:
 
-* to make musical chords notated according to Harte Notation interoperable with the music21 library;
-* to make chords notated in Harte interpretable, e.g. by unrolling the shorthand;
-* to simplify and homogenise chords in Harte, via the *prettify_harte* functionality.
+- **Interoperability**: Seamlessly integrate musical chords notated in Harte Notation with the music21 library.
+- **Interpretability**: Easily interpret chords notated in Harte format, including the unrolling of shorthand representations.
+- **Simplification**: Streamline and standardize chords in Harte notation using the prettify_harte functionality.
 
 ## Usage
 
-### Interval Module Extension
+### Interval Module
 
-The Harte Library extends the *Interval Module* of music21 to ensure interoperability between intervals expressed according to Harte notation and the interval class of music21.
+The Harte Library extends the Interval Module of music21 to ensure interoperability between intervals expressed according to Harte notation and the interval class of music21.
 
-The __HarteInterval__ class accepts an interval expressed in Harte Notation as input and allows all the properties and methods of the music21 Interval module to be used:
+The **HarteInterval** class accepts an interval expressed in Harte Notation as input and allows all the properties and methods of the music21 Interval module to be used:
 
 ```python
 from harte.interval import HarteInterval
@@ -49,11 +47,11 @@ int_name = interval.name
 int_is_consonant = interval.isConsonant()
 ```
 
-### Chord Module Extension
+### Chord Module
 
-The main functionality of the Harte Library is an extension of the *Chord Module* of music21.
+The primary functionality of the Harte Library extends the Chord Module of music21.
 
-This is possible by means of the class __Harte__, which accepts as input a chord expressed in Harte Notation and allows all properties and methods of the Chord module of music21 to be used:
+This is achieved through the **Harte** class, which accepts a chord expressed in Harte Notation as input, enabling the utilization of all properties and methods available in the Chord module of music21:
 
 ```python
 from harte.harte import Harte
@@ -62,17 +60,19 @@ chord = Harte('C#:maj7(b6)/b3')
 
 bass = chord.bass()  # E
 root = chord.root()  # C#
-name = chord.fullName  # Chord {G-sharp | A | E | B-sharp | C-sharp | E-sharp} Quarter
+name = chord.fullName  # Chord {C-sharp in octave 4 | E in octave 3 | E-sharp in octave 4 | G-sharp in octave 4 | A in octave 4 | B-sharp in octave 4} Quarter
 ```
 
-In addition, the library implements new methods specific to Harte notation, including:
-* __get_degrees__: returns the intervals of the chord, disregarding those expressed by the shorthand
-* __get_root__: returns the root of the chord expressed as a string
-* __get_bass__: returns the interval between the root note and the bass note
-* __contains_shorthand__: returns `True` if the chord contains a shorthand, `False` otherwise
-* __get_shorthand__: returns the chord's shorthand, if present
-* __unwrap_shorthand__: returns a list containing all the intervals in the chord, including those wrapped by the shorthand
-* __prettify__: breaks the chord into its components and recomposes it by choosing the most summarised shorthand, if possible.
+Additionally, the library introduces new methods tailored specifically for Harte notation, including:
+
+- **get_degrees()**: Retrieves the intervals of the chord, excluding those represented by shorthand.
+- **get_midi_pitches()**: Obtains the MIDI pitches of the chord as an ordered list.
+- **get_root()**: Retrieves the root of the chord as a string.
+- **get_bass()**: Calculates the interval between the root note and the bass note.
+- **contains_shorthand()**: Determines whether the chord contains a shorthand representation, returning `True` if present, `False` otherwise.
+- **get_shorthand()**: Retrieves the shorthand representation of the chord, if available.
+- **unwrap_shorthand()**: Unwraps the shorthand notation, returning a list containing all intervals in the chord, including those represented by shorthand.
+- **prettify()**: Decomposes the chord into its constituent components and recomposes it by selecting the most concise shorthand representation, if applicable.
 
 ```python
 from harte.harte import Harte
@@ -82,10 +82,12 @@ chord = Harte('D:(b3,5,7,9)')
 pretty_harte = chord.prettify()  # D:minmaj7(9)
 ```
 
-## Contributing
+## Contributing
+We welcome contributions from the community to enhance the Harte Library. Whether you want to report a bug, suggest a new feature, or contribute code, your help is greatly appreciated!
 
-Every type of contribution to the library is widely encouraged.
-The library has also just been released and any bug reports are highly appreciated.
+## Reporting Issues
+
+If you encounter any bugs, have feature requests, or have suggestions for improvements, please open an [issue](https://github.com/andreamust/harte-library/issues) with detailed information about the problem or suggestion.
 
 ## License
 
@@ -110,4 +112,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
