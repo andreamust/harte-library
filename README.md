@@ -14,7 +14,7 @@ The library has the following dependencies:
 - [music21](http://web.mit.edu/music21/): as an extension of the library itself;
 - [Lark](https://github.com/lark-parser/lark): for parsing the chords in Harte.
 
-## Installation
+## 🛠️ Installation
 
 The library is available on PyPi. To install, simply execute the following command:
 
@@ -30,9 +30,9 @@ The Harte Library offers several core functionalities:
 - **Interpretability**: Easily interpret chords notated in Harte format, including the unrolling of shorthand representations.
 - **Simplification**: Streamline and standardize chords in Harte notation using the prettify_harte functionality.
 
-## Usage
+## 🚀 Usage
 
-### Interval Module
+### 🎵 Interval Module
 
 The Harte Library extends the Interval Module of music21 to ensure interoperability between intervals expressed according to Harte notation and the interval class of music21.
 
@@ -47,7 +47,7 @@ int_name = interval.name
 int_is_consonant = interval.isConsonant()
 ```
 
-### Chord Module
+### 🎸 Chord Module
 
 The primary functionality of the Harte Library extends the Chord Module of music21.
 
@@ -82,10 +82,11 @@ chord = Harte('D:(b3,5,7,9)')
 pretty_harte = chord.prettify()  # D:minmaj7(9)
 ```
 
-## Contributing
+## 🤝 Contributing
+
 We welcome contributions from the community to enhance the Harte Library. Whether you want to report a bug, suggest a new feature, or contribute code, your help is greatly appreciated!
 
-## Reporting Issues
+## 🐞 Reporting Issues
 
 If you encounter any bugs, have feature requests, or have suggestions for improvements, please open an [issue](https://github.com/andreamust/harte-library/issues) with detailed information about the problem or suggestion.
 
