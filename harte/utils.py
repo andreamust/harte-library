@@ -95,7 +95,3 @@ def degree_to_sort_key(degree: str) -> float:
         degree_number += 0.49
 
     return degree_number
-
-
-if __name__ == "__main__":
-    print(unwrap_shorthand("minmaj9", ["b7", "b9"]))

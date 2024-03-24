@@ -59,8 +59,3 @@ class HarteInterval(Interval):
         :return: A string representation of the HarteInterval object
         """
         return self._harte_interval
-
-
-if __name__ == "__main__":
-    i = HarteInterval("3").transposeNote(Note("C"))
-    print(i)

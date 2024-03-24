@@ -235,7 +235,9 @@ class Harte(Chord):
             )
             if len(shorthand) > 0 or len(clean_harte_degrees) > 0:
                 separator = ":"
-            return self._root + separator + shorthand + clean_harte_degrees
+
+            bass = f"/{self._bass}" if self._bass != "1" else ""
+            return self._root + separator + shorthand + clean_harte_degrees + bass
         return self.chord
 
     def unwrap_shorthand(self) -> Union[List[str], None]:
@@ -291,16 +293,3 @@ class Harte(Chord):
             chord_str = "N"
 
         return chord_str
-
-
-if __name__ == "__main__":
-    # test utilities
-    c = Harte("B:maj7")
-    # print(c.fullName)
-    # print(c.commonName)
-    # print(c.pitches)
-    # print(c.get_midi_pitches())
-    # print(c.inversion())
-    # print(c.bass(), c.get_bass())
-    # print(c.prettify())
-    print(c.multi_hot_encoding(transpose=False))
