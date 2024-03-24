@@ -138,6 +138,22 @@ class Harte(Chord):
         """
         return sorted([x.midi for x in self.pitches])
 
+    def multi_hot_encoding(self, transpose: bool = False) -> List[int]:
+        """
+        Method to retrieve the multi-hot encoding of the chord in Harte notation.
+        The multi-hot encoding is a list of integers where each integer is 1 if
+        the corresponding pitch is present in the chord, 0 otherwise
+        :return: a list of integers representing the multi-hot encoding of the
+        chord in Harte notation
+        """
+        pitch_classes = [x.pitchClass for x in self.pitches]
+        if transpose:
+            # get the pitch class of the root note
+            root_pitch_class = self.root().pitchClass
+            # transpose the chord so that the root note is at the 0th position
+            pitch_classes = [(x - root_pitch_class) % 12 for x in pitch_classes]
+        return [1 if i in pitch_classes else 0 for i in range(12)]
+
     def get_root(self) -> str:
         """
         Method to retrieve the root of the chord in Harte notation expressed as
@@ -279,11 +295,12 @@ class Harte(Chord):
 
 if __name__ == "__main__":
     # test utilities
-    c = Harte("C#:(b6)")
-    print(c.fullName)
-    print(c.commonName)
-    print(c.pitches)
-    print(c.get_midi_pitches())
-    print(c.inversion())
-    print(c.bass(), c.get_bass())
-    print(c.prettify())
+    c = Harte("B:maj7")
+    # print(c.fullName)
+    # print(c.commonName)
+    # print(c.pitches)
+    # print(c.get_midi_pitches())
+    # print(c.inversion())
+    # print(c.bass(), c.get_bass())
+    # print(c.prettify())
+    print(c.multi_hot_encoding(transpose=False))
