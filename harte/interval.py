@@ -4,7 +4,6 @@ Harte notation.
 """
 
 from music21.interval import Interval, IntervalException
-from music21.note import Note
 
 from harte.utils import convert_interval
 
