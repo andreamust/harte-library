@@ -31,14 +31,18 @@ def test_coverage(chord: str):
     Harte(chord)
 
 
-@pytest.mark.parametrize("chord,intervals",
-                         [("C", ["P5", "M3"]),
-                          ("A", ["P5", "M3"]),
-                          ("C:maj", ["P5", "M3"]),
-                          ("C:min", ["P5", "m3"]),
-                          ("C:dim", ["d5", "m3"]),
-                          ("C:aug", ["A5", "M3"]),
-                          ("N", [])])
+@pytest.mark.parametrize(
+    "chord,intervals",
+    [
+        ("C", ["P5", "M3"]),
+        ("A", ["P5", "M3"]),
+        ("C:maj", ["P5", "M3"]),
+        ("C:min", ["P5", "m3"]),
+        ("C:dim", ["d5", "m3"]),
+        ("C:aug", ["A5", "M3"]),
+        ("N", []),
+    ],
+)
 def test_interval_extraction(chord: str, intervals: List[str]):
     """
     Test that the annotateIntervals of music21 correctly works in extracting
@@ -50,18 +54,20 @@ def test_interval_extraction(chord: str, intervals: List[str]):
     :type intervals: List[str]
     """
     chord = Harte(chord)
-    annotated_intervals = chord.annotateIntervals(inPlace=False,
-                                                  returnList=True,
-                                                  stripSpecifiers=False)
+    annotated_intervals = chord.annotateIntervals(
+        inPlace=False, returnList=True, stripSpecifiers=False
+    )
     assert set(intervals) == set(annotated_intervals)
 
 
-@pytest.mark.parametrize("chord,pitches", [("F:(b3, 5, b7, 11)",
-                                            ["F", "A-", "C", "E-", "B-"]),
-                                           ("F:(b3, 11, b7, 5)",
-                                            ["F", "A-", "C", "E-", "B-"]),
-                                           ("F:maj7(#11)",
-                                            ["F", "A", "C", "E", "B"])])
+@pytest.mark.parametrize(
+    "chord,pitches",
+    [
+        ("F:(b3, 5, b7, 11)", ["F", "A-", "C", "E-", "B-"]),
+        ("F:(b3, 11, b7, 5)", ["F", "A-", "C", "E-", "B-"]),
+        ("F:maj7(#11)", ["F", "A", "C", "E", "B"]),
+    ],
+)
 def test_ordering_of_degrees(chord: str, pitches: List[str]):
     """
     Test that the parsed degrees are ordered correctly in the resulting m21
