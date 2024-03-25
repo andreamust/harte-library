@@ -11,7 +11,7 @@ This project is a component of [ChoCo](https://github.com/smashub/choco), a comp
 
 The library has the following dependencies:
 
-- [music21](http://web.mit.edu/music21/): as an extension of the library itself;
+- [music21](http://web.mit.edu/music21/): the base library the *harte-library* extends;
 - [Lark](https://github.com/lark-parser/lark): for parsing the chords in Harte.
 
 ## 🛠️ Installation
@@ -82,7 +82,7 @@ chord = Harte('D:(b3,5,7,9)')
 pretty_harte = chord.prettify()  # D:minmaj7(9)
 ```
 
-## 🤝 Contributing
+## 🤝 Contributing
 
 We welcome contributions from the community to enhance the Harte Library. Whether you want to report a bug, suggest a new feature, or contribute code, your help is greatly appreciated!
 
