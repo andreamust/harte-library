@@ -5,6 +5,7 @@ Utility functions for processing Harte Chords
 # pylint: disable=consider-iterating-dictionary
 
 import re
+from hmac import new
 from typing import List
 
 from harte.mappings import SHORTHAND_DEGREES
@@ -37,6 +38,9 @@ def convert_interval(harte_interval: str) -> str:
             return convert_interval(f"{new_sharps}{base_degree + 1}")
         elif n_sharp == 0 and n_flat == 2:
             new_flats = matches[1].replace("bb", "")
+            if base_degree == 1:
+                base_degree = 8
+                new_flats += "b"
             return convert_interval(f"{new_flats}{base_degree - 1}")
         else:
             raise ValueError(f"The degree {harte_interval} cannot be parsed.")
