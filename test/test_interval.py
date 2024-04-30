@@ -2,11 +2,8 @@
 Test the HarteInterval class
 """
 
-from typing import List
-
 import pytest
 
-from harte.interval import HarteInterval
 from harte.utils import convert_interval
 
 
