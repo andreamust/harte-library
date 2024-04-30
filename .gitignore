@@ -134,4 +134,4 @@ dmypy.json
 .vscode/
 
 # test files
-harte/test.ipynb
+_test.ipynb
