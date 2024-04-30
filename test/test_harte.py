@@ -53,8 +53,8 @@ def test_interval_extraction(chord: str, intervals: List[str]):
     :param intervals: Intervals that should be part of the chord
     :type intervals: List[str]
     """
-    chord = Harte(chord)
-    annotated_intervals = chord.annotateIntervals(
+    chord = Harte(chord)  # type: ignore
+    annotated_intervals = chord.annotateIntervals(  # type: ignore
         inPlace=False, returnList=True, stripSpecifiers=False
     )
     assert set(intervals) == set(annotated_intervals)
@@ -78,5 +78,5 @@ def test_ordering_of_degrees(chord: str, pitches: List[str]):
     :param pitches: Pitches that should be part of the chord
     :type pitches: List[str]
     """
-    chord = Harte(chord)
-    assert [p.name for p in chord.pitches] == pitches
+    chord = Harte(chord)  # type: ignore
+    assert [p.name for p in chord.pitches] == pitches  # type: ignore
