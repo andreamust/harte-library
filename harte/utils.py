@@ -3,9 +3,9 @@ Utility functions for processing Harte Chords
 """
 
 # pylint: disable=consider-iterating-dictionary
+# pylint: disable=too-many-branches
 
 import re
-from hmac import new
 from typing import List
 
 from harte.mappings import SHORTHAND_DEGREES
