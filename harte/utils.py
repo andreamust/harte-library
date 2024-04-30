@@ -21,32 +21,33 @@ def convert_interval(harte_interval: str) -> str:
     """
     regex = r"([#]+)?([b]+)?(\d+)"
     matches = re.findall(regex, harte_interval)[0]
+    n_sharp, n_flat = len(matches[0]), len(matches[1])
 
     base_degree = int(matches[2]) if int(matches[2]) < 8 else int(matches[2]) - 7
 
     if base_degree in [1, 4, 5]:
-        if len(matches[0]) == 0 and len(matches[1]) == 0:
+        if n_sharp == 0 and n_flat == 0:
             modifier = "P"
-        elif len(matches[1]) == 1 and len(matches[0]) == 0:
+        elif n_sharp == 1 and n_flat == 0:
             modifier = "A"
-        elif len(matches[0]) == 1 and len(matches[1]) == 0:
+        elif n_sharp == 0 and n_flat == 1:
             modifier = "d"
-        elif len(matches[0]) >= 2 and len(matches[1]) == 0:
+        elif n_sharp == 2 and n_flat == 0:
             new_sharps = matches[0].replace("##", "")
             return convert_interval(f"{new_sharps}{base_degree + 1}")
-        elif len(matches[1]) >= 2 and len(matches[0]) == 0:
+        elif n_sharp == 0 and n_flat == 2:
             new_flats = matches[1].replace("bb", "")
             return convert_interval(f"{new_flats}{base_degree - 1}")
         else:
-            raise ValueError(f"The degree {harte_interval} cannot " f"be parsed.")
+            raise ValueError(f"The degree {harte_interval} cannot be parsed.")
     else:
-        if len(matches[0]) == 0 and len(matches[1]) == 0:
+        if n_sharp == 0 and n_flat == 0:
             modifier = "M"
-        elif len(matches[0]) == 1 and len(matches[1]) == 0:
+        elif n_sharp == 1 and n_flat == 0:
             modifier = "A"
-        elif len(matches[1]) == 1 and len(matches[0]) == 0:
+        elif n_sharp == 0 and n_flat == 1:
             modifier = "m"
-        elif len(matches[1]) == 2 and len(matches[0]) == 0:
+        elif n_sharp == 0 and n_flat == 2:
             modifier = "d"
         else:
             raise ValueError(f"The degree {harte_interval} cannot " f"be parsed.")
